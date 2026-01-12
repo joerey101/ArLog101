@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Propuestas - SecureDocs</title>
+    <!-- Tailwind CSS (Diseño) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fuente Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800">
+
+    <!-- Navegación -->
+    <nav class="bg-slate-900 text-white p-4 shadow-lg">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <!-- Icono Shield -->
+                <svg class="text-emerald-400 w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                <span class="text-xl font-bold tracking-tight">Gestor de <span class="text-slate-400 font-normal">Propuestas</span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenedor Principal -->
+    <div class="container mx-auto px-4 py-10 max-w-2xl">
+        
+        <!-- Tarjeta de Carga -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 fade-in">
+            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <!-- Icono Upload -->
+                <svg class="mr-2 text-emerald-600 w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                Cargar Nuevo Documento
+            </h2>
+
+            <!-- Formulario -->
+            <form id="uploadForm" class="space-y-4 mb-8">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Título del Documento *</label>
+                    <input type="text" id="docTitle" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition" placeholder="Ej: Propuesta Comercial 2024">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Departamento</label>
+                        <select id="docDept" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
+                            <option value="general">General</option>
+                            <option value="legal">Legal</option>
+                            <option value="rrhh">RRHH</option>
+                            <option value="finanzas">Finanzas</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Descripción</label>
+                        <input type="text" id="docDesc" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Opcional">
+                    </div>
+                </div>
+            </form>
+
+            <!-- Zona de Arrastrar y Soltar -->
+            <div id="dropZone" class="relative border-2 border-dashed border-slate-300 bg-slate-50 rounded-xl p-10 text-center transition-all duration-200 cursor-pointer hover:border-emerald-400 hover:bg-emerald-50">
+                <input type="file" id="fileInput" class="hidden" accept=".pdf">
+                
+                <!-- Vista Inicial (Sin archivo) -->
+                <div id="emptyState" class="flex flex-col items-center pointer-events-none">
+                    <div class="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-4 text-slate-500">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    </div>
+                    <p class="text-lg font-medium text-slate-700">Arrastra tu PDF aquí</p>
+                    <p class="text-sm text-slate-500 mt-2">o haz clic para explorar</p>
+                    <p class="text-xs text-slate-400 mt-4">Solo PDF. Máximo 10MB.</p>
+                </div>
+
+                <!-- Vista con Archivo Seleccionado (Oculta por defecto) -->
+                <div id="fileState" class="hidden flex-col items-center">
+                    <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4 text-emerald-600">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    </div>
+                    <p id="fileName" class="font-semibold text-slate-800 truncate max-w-xs mb-2">archivo.pdf</p>
+                    <div class="flex space-x-3 mt-4 pointer-events-auto">
+                        <button id="btnCancel" type="button" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-100 transition text-sm">Cancelar</button>
+                        <button id="btnUpload" type="button" class="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition shadow-md text-sm font-medium flex items-center">
+                            <span id="btnText">Subir Documento</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mensajes de Estado -->
+            <div id="msgError" class="hidden mt-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span id="errorText">Error</span>
+            </div>
+
+            <div id="msgSuccess" class="hidden mt-4 p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-700 text-sm flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div>
+                    <span class="font-bold block">¡Éxito!</span>
+                    <span id="successText">El documento se ha guardado correctamente.</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURACIÓN DE CONEXIÓN
+        // IMPORTANTE: Esta URL apunta directamente a tu archivo PHP en DreamHost.
+        const API_URL = 'https://arlogjobs.joserey101.com/upload.php';
+
+        // Elementos DOM
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const emptyState = document.getElementById('emptyState');
+        const fileState = document.getElementById('fileState');
+        const fileName = document.getElementById('fileName');
+        const btnCancel = document.getElementById('btnCancel');
+        const btnUpload = document.getElementById('btnUpload');
+        const btnText = document.getElementById('btnText');
+        const msgError = document.getElementById('msgError');
+        const errorText = document.getElementById('errorText');
+        const msgSuccess = document.getElementById('msgSuccess');
+        const successText = document.getElementById('successText');
+
+        let currentFile = null;
+
+        // --- Funciones de Utilidad ---
+        function showError(msg) {
+            msgError.classList.remove('hidden');
+            msgSuccess.classList.add('hidden');
+            errorText.textContent = msg;
+        }
+
+        function clearMessages() {
+            msgError.classList.add('hidden');
+            msgSuccess.classList.add('hidden');
+        }
+
+        function resetForm() {
+            currentFile = null;
+            fileInput.value = '';
+            emptyState.classList.remove('hidden');
+            fileState.classList.add('hidden');
+            fileState.classList.remove('flex');
+            clearMessages();
+            document.getElementById('docTitle').value = '';
+        }
+
+        function validateFile(file) {
+            if (file.type !== 'application/pdf') {
+                showError('Solo se permiten archivos PDF.');
+                return false;
+            }
+            if (file.size > 10 * 1024 * 1024) { // 10MB
+                showError('El archivo es demasiado grande (Máx 10MB).');
+                return false;
+            }
+            return true;
+        }
+
+        function handleFileSelect(file) {
+            clearMessages();
+            if (validateFile(file)) {
+                currentFile = file;
+                fileName.textContent = file.name;
+                emptyState.classList.add('hidden');
+                fileState.classList.remove('hidden');
+                fileState.classList.add('flex');
+            }
+        }
+
+        // --- Event Listeners ---
+
+        // Drag & Drop
+        dropZone.addEventListener('click', (e) => {
+            if(e.target !== btnCancel && e.target !== btnUpload && e.target.parentElement !== btnUpload) {
+                fileInput.click();
+            }
+        });
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-emerald-500', 'bg-emerald-50');
+        });
+
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-emerald-500', 'bg-emerald-50');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-emerald-500', 'bg-emerald-50');
+            if (e.dataTransfer.files.length) {
+                handleFileSelect(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (fileInput.files.length) {
+                handleFileSelect(fileInput.files[0]);
+            }
+        });
+
+        btnCancel.addEventListener('click', (e) => {
+            e.stopPropagation();
+            resetForm();
+        });
+
+        // --- Subida al Servidor ---
+        btnUpload.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const title = document.getElementById('docTitle').value.trim();
+            
+            if (!currentFile) { showError('Selecciona un archivo primero.'); return; }
+            if (!title) { showError('El título es obligatorio.'); return; }
+
+            // Estado de carga
+            btnUpload.disabled = true;
+            btnText.textContent = 'Subiendo...';
+            clearMessages();
+
+            const formData = new FormData();
+            formData.append('file', currentFile);
+            formData.append('title', title);
+            formData.append('department', document.getElementById('docDept').value);
+            formData.append('description', document.getElementById('docDesc').value);
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                let result;
+                try {
+                    result = await response.json();
+                } catch (e) {
+                    throw new Error('Respuesta inválida del servidor. Verifica el archivo upload.php');
+                }
+
+                if (result.success) {
+                    msgSuccess.classList.remove('hidden');
+                    successText.textContent = result.message;
+                    // Limpieza parcial
+                    setTimeout(() => {
+                        currentFile = null;
+                        emptyState.classList.remove('hidden');
+                        fileState.classList.add('hidden');
+                        fileState.classList.remove('flex');
+                        document.getElementById('docTitle').value = '';
+                    }, 2000);
+                } else {
+                    showError(result.message || 'Error desconocido.');
+                }
+
+            } catch (err) {
+                showError('Error de conexión: ' + err.message);
+            } finally {
+                btnUpload.disabled = false;
+                btnText.textContent = 'Subir Documento';
+            }
+        });
+    </script>
+</body>
+</html>

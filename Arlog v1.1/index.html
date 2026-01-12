@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Propuestas - Arlog Jobs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <nav class="bg-slate-200 text-slate-800 p-4 shadow-sm border-b border-slate-300">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-3 group">
+                <img src="arlogjobs_logo.png" alt="Arlog Jobs - Portal de Talento" class="h-12 w-auto object-contain transition-transform group-hover:scale-105 mix-blend-multiply">
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-10 max-w-2xl">
+        
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-8 fade-in">
+            <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center">
+                <svg class="mr-3 text-slate-500 w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                Datos del Postulante
+            </h2>
+
+            <form id="uploadForm" class="space-y-6 mb-8">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nombre Completo *</label>
+                        <input type="text" id="candidateName" required class="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-slate-400 outline-none transition" placeholder="Ej: Juan Pérez">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Correo Electrónico *</label>
+                        <input type="email" id="candidateEmail" required class="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-slate-400 outline-none transition" placeholder="juan@email.com">
+                    </div>
+                </div>
+
+                <hr class="border-slate-100">
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Título del Documento *</label>
+                    <input type="text" id="docTitle" required class="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-slate-400 outline-none transition" placeholder="Ej: CV - Chofer de Larga Distancia">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Departamento</label>
+                        <select id="docDept" class="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-slate-400 outline-none cursor-pointer">
+                            <option value="general">General</option>
+                            <option value="operaciones">Operaciones</option>
+                            <option value="logistica">Logística</option>
+                            <option value="administracion">Administración</option>
+                            <option value="rrhh">RRHH</option>
+                            <option value="taller">Taller</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Comentarios</label>
+                        <input type="text" id="docDesc" class="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:bg-white focus:ring-2 focus:ring-slate-400 outline-none" placeholder="Opcional">
+                    </div>
+                </div>
+            </form>
+
+            <div id="dropZone" class="relative border-2 border-dashed border-slate-300 bg-slate-50 rounded-xl p-10 text-center transition-all duration-200 cursor-pointer hover:border-slate-400 hover:bg-slate-100">
+                <input type="file" id="fileInput" class="hidden" accept=".pdf">
+                
+                <div id="emptyState" class="flex flex-col items-center pointer-events-none">
+                    <div class="w-14 h-14 bg-white border border-slate-200 rounded-full flex items-center justify-center mb-4 text-slate-400 shadow-sm">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                    </div>
+                    <p class="text-base font-semibold text-slate-700">Sube tu CV o Documento</p>
+                    <p class="text-sm text-slate-400 mt-1">Formato PDF (Máx 10MB)</p>
+                </div>
+
+                <div id="fileState" class="hidden flex-col items-center">
+                    <div class="w-14 h-14 bg-emerald-50 border border-emerald-100 rounded-full flex items-center justify-center mb-4 text-emerald-600 shadow-sm">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    </div>
+                    <p id="fileName" class="font-bold text-slate-800 truncate max-w-xs text-base">archivo.pdf</p>
+                    <div class="flex space-x-3 mt-4 pointer-events-auto">
+                        <button id="btnCancel" type="button" class="px-4 py-2 border border-slate-300 text-slate-600 rounded-lg hover:bg-white hover:text-slate-800 text-sm font-medium transition">Cambiar</button>
+                        <button id="btnUpload" type="button" class="px-6 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-900 shadow-lg shadow-slate-200 text-sm font-bold flex items-center transition transform active:scale-95">
+                            <span id="btnText">Enviar Postulación</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="msgError" class="hidden mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-center fade-in">
+                <i class="fas fa-exclamation-circle mr-2"></i> <span id="errorText">Error</span>
+            </div>
+
+            <div id="msgSuccess" class="hidden mt-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-700 text-sm flex items-center fade-in">
+                <i class="fas fa-check-circle mr-2"></i> 
+                <div><span class="font-bold">¡Recibido!</span> <span id="successText">Tus datos han sido enviados.</span></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://arlogjobs.joserey101.com/upload.php';
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const emptyState = document.getElementById('emptyState');
+        const fileState = document.getElementById('fileState');
+        const fileName = document.getElementById('fileName');
+        const btnCancel = document.getElementById('btnCancel');
+        const btnUpload = document.getElementById('btnUpload');
+        const btnText = document.getElementById('btnText');
+        const inputName = document.getElementById('candidateName');
+        const inputEmail = document.getElementById('candidateEmail');
+        let currentFile = null;
+
+        function showError(msg) {
+            document.getElementById('msgError').classList.remove('hidden');
+            document.getElementById('msgSuccess').classList.add('hidden');
+            document.getElementById('errorText').textContent = msg;
+        }
+        function clearMessages() {
+            document.getElementById('msgError').classList.add('hidden');
+            document.getElementById('msgSuccess').classList.add('hidden');
+        }
+        function resetForm() {
+            currentFile = null;
+            fileInput.value = '';
+            emptyState.classList.remove('hidden');
+            fileState.classList.add('hidden');
+            fileState.classList.remove('flex');
+            clearMessages();
+            document.getElementById('docTitle').value = '';
+            document.getElementById('docDesc').value = '';
+            inputName.value = '';
+            inputEmail.value = '';
+        }
+        function handleFileSelect(file) {
+            clearMessages();
+            if (file.type !== 'application/pdf') { showError('Solo se permiten archivos PDF.'); return; }
+            if (file.size > 10 * 1024 * 1024) { showError('El archivo es demasiado grande (Máx 10MB).'); return; }
+            currentFile = file;
+            fileName.textContent = file.name;
+            emptyState.classList.add('hidden');
+            fileState.classList.remove('hidden');
+            fileState.classList.add('flex');
+        }
+
+        dropZone.addEventListener('click', (e) => { if(e.target !== btnCancel && e.target !== btnUpload && e.target.parentElement !== btnUpload) fileInput.click(); });
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('bg-slate-100'); });
+        dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); dropZone.classList.remove('bg-slate-100'); });
+        dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.classList.remove('bg-slate-100'); if (e.dataTransfer.files.length) handleFileSelect(e.dataTransfer.files[0]); });
+        fileInput.addEventListener('change', () => { if (fileInput.files.length) handleFileSelect(fileInput.files[0]); });
+        btnCancel.addEventListener('click', (e) => { e.stopPropagation(); resetForm(); });
+
+        btnUpload.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const title = document.getElementById('docTitle').value.trim();
+            const name = inputName.value.trim();
+            const email = inputEmail.value.trim();
+            
+            if (!currentFile) { showError('Falta adjuntar el archivo PDF.'); return; }
+            if (!name) { showError('El nombre es obligatorio.'); inputName.focus(); return; }
+            if (!email) { showError('El email es obligatorio.'); inputEmail.focus(); return; }
+            if (!title) { showError('El título es obligatorio.'); document.getElementById('docTitle').focus(); return; }
+
+            btnUpload.disabled = true;
+            btnText.textContent = 'Enviando...';
+            clearMessages();
+
+            const formData = new FormData();
+            formData.append('file', currentFile);
+            formData.append('title', title);
+            formData.append('department', document.getElementById('docDept').value);
+            formData.append('description', document.getElementById('docDesc').value);
+            formData.append('candidate_name', name);
+            formData.append('candidate_email', email);
+
+            try {
+                const response = await fetch(API_URL, { method: 'POST', body: formData });
+                const result = await response.json();
+                if (result.success) {
+                    document.getElementById('msgSuccess').classList.remove('hidden');
+                    document.getElementById('successText').textContent = result.message;
+                    setTimeout(() => resetForm(), 3000);
+                } else {
+                    showError(result.message || 'Error del servidor.');
+                }
+            } catch (err) {
+                showError('Error de conexión.');
+            } finally {
+                btnUpload.disabled = false;
+                btnText.textContent = 'Enviar Postulación';
+            }
+        });
+    </script>
+</body>
+</html>
