@@ -37,6 +37,10 @@
         <p class="mt-6 text-center text-sm text-slate-600">
             ¿No tienes cuenta? <a href="registro.html" class="text-emerald-600 font-bold">Crea una aquí</a>
         </p>
+        <div class="mt-4 text-center">
+            <a href="index.php" class="text-xs text-slate-400 hover:text-slate-600 font-bold"><i
+                    class="fas fa-arrow-left mr-1"></i> Volver al Inicio</a>
+        </div>
     </div>
 
     <script>
@@ -53,7 +57,7 @@
                 if (data.rol === 'empresa' || data.rol === 'admin') {
                     window.location.href = 'dashboard_empresa.php';
                 } else {
-                    window.location.href = 'index.html';
+                    window.location.href = 'empleos.html'; // Redirigir a listado de empleos
                 }
             } else {
                 alert(data.message);

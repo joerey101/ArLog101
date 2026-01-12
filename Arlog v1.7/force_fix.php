@@ -8,15 +8,10 @@ try {
     $pdo->exec($sql);
     echo "<p style='color:green'>✅ Columna ROL cambiada a VARCHAR(50). Restricciones eliminadas.</p>";
 
-    // Fix Masivo de Candidatos
-    // Todo lo que no sea admin o empresa conocida -> CANDIDATO
-    $sql = "UPDATE usuarios 
-            SET rol = 'candidato' 
-            WHERE email NOT IN ('admin@arlog.com', 'admin@admin.com', 'fly@fly.com', 'arenales1438@gmail.com') 
-            AND (rol = '' OR rol IS NULL OR rol = 'asociado')";
-
-    $count = $pdo->exec($sql);
-    echo "<p style='color:blue'>ℹ️ Se actualizaron $count usuarios antiguos a rol 'candidato'.</p>";
+    // De paso, intentamos arreglar al usuario fly
+    $stmt = $pdo->prepare("UPDATE usuarios SET rol = 'empresa' WHERE email = ?");
+    $stmt->execute(['fly@fly.com']);
+    echo "<p style='color:blue'>ℹ️ Intenté forzar rol 'empresa' a fly@fly.com</p>";
 
 } catch (PDOException $e) {
     echo "<p style='color:red'>❌ Error extremo: " . $e->getMessage() . "</p>";

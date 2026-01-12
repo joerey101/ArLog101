@@ -154,8 +154,8 @@
 
             async function loadJobs() {
                 try {
-                    // Carga de empleos
-                    const resJobs = await fetch('api_jobs.php');
+                    // Carga de empleos (Cache busting added)
+                    const resJobs = await fetch('api_jobs.php?t=' + Date.now());
                     const jsonJobs = await resJobs.json();
                     allJobs = jsonJobs.data;
 
@@ -332,7 +332,7 @@
                 btn.disabled = false; btn.textContent = "Enviar Postulación";
             };
 
-            async function logout() { await fetch('auth.php?action=logout'); location.reload(); }
+            async function logout() { await fetch('auth.php?action=logout'); window.location.href = 'index.php'; }
             window.onload = async () => {
                 await checkAuth();
                 await loadJobs();
