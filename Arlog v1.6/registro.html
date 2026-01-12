@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cuenta | Arlog Jobs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-xl border border-slate-200 w-full max-w-md">
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-bold text-slate-800">Crea tu cuenta</h2>
+            <p class="text-slate-500 text-sm">Únete a la red de talento logístico</p>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-xs font-bold text-slate-500 uppercase mb-2 text-center">¿Qué deseas hacer?</label>
+            <div class="flex gap-4">
+                <button type="button" onclick="setRole('candidato')" id="btnCand"
+                    class="flex-1 p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-800 transition-all flex flex-col items-center gap-2">
+                    <i class="fas fa-user text-xl"></i>
+                    <span class="text-xs font-bold uppercase">Buscar Trabajo</span>
+                </button>
+                <button type="button" onclick="setRole('empresa')" id="btnEmp"
+                    class="flex-1 p-4 rounded-xl border-2 border-slate-100 bg-white text-slate-400 hover:border-slate-300 transition-all flex flex-col items-center gap-2">
+                    <i class="fas fa-briefcase text-xl"></i>
+                    <span class="text-xs font-bold uppercase">Publicar Avisos</span>
+                </button>
+            </div>
+        </div>
+
+        <form id="regForm" class="space-y-4">
+            <input type="hidden" id="rol" value="candidato">
+
+            <div>
+                <label id="labelNombre" class="block text-xs font-bold text-slate-500 uppercase mb-1">Nombre
+                    Completo</label>
+                <input type="text" id="nombre" required
+                    class="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-400 outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Email</label>
+                <input type="email" id="email" required
+                    class="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-400 outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Contraseña</label>
+                <input type="password" id="password" required
+                    class="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-400 outline-none">
+            </div>
+
+            <div id="cuitField" class="hidden">
+                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">CUIT (Opcional por ahora)</label>
+                <input type="text" id="cuit"
+                    class="w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg outline-none">
+            </div>
+
+            <button type="submit"
+                class="w-full py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition shadow-lg shadow-emerald-100">Registrarme</button>
+        </form>
+
+        <p class="mt-6 text-center text-sm text-slate-600">
+            ¿Ya tienes cuenta? <a href="login.html" class="text-emerald-600 font-bold">Ingresa aquí</a>
+        </p>
+    </div>
+
+    <script>
+        function setRole(role) {
+            document.getElementById('rol').value = role;
+            const btnCand = document.getElementById('btnCand');
+            const btnEmp = document.getElementById('btnEmp');
+            const labelNombre = document.getElementById('labelNombre');
+
+            if (role === 'candidato') {
+                btnCand.className = "flex-1 p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-800 transition-all flex flex-col items-center gap-2 ring-2 ring-emerald-200 ring-offset-1";
+                btnEmp.className = "flex-1 p-4 rounded-xl border-2 border-slate-100 bg-white text-slate-400 hover:border-slate-300 transition-all flex flex-col items-center gap-2 opacity-50";
+                labelNombre.textContent = "Nombre Completo";
+                document.getElementById('cuitField').classList.add('hidden');
+            } else {
+                btnEmp.className = "flex-1 p-4 rounded-xl border-2 border-slate-900 bg-slate-50 text-slate-900 transition-all flex flex-col items-center gap-2 ring-2 ring-slate-200 ring-offset-1";
+                btnCand.className = "flex-1 p-4 rounded-xl border-2 border-slate-100 bg-white text-emerald-400 hover:border-emerald-200 transition-all flex flex-col items-center gap-2 opacity-50";
+                labelNombre.textContent = "Razón Social / Nombre Fantasía";
+                // document.getElementById('cuitField').classList.remove('hidden'); // Descomentar en fase avanzada
+            }
+        }
+
+        document.getElementById('regForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.querySelector('button[type="submit"]');
+            btn.textContent = "Registrando..."; btn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('nombre', document.getElementById('nombre').value);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('password', document.getElementById('password').value);
+            formData.append('rol', document.getElementById('rol').value);
+
+            try {
+                const res = await fetch('auth.php?action=register', { method: 'POST', body: formData });
+                const data = await res.json();
+                if (data.success) {
+                    if (document.getElementById('rol').value === 'empresa') {
+                        window.location.href = 'dashboard_empresa.php';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                } else {
+                    alert(data.message);
+                    btn.textContent = "Registrarme"; btn.disabled = false;
+                }
+            } catch (e) {
+                alert("Error de conexión");
+                btn.textContent = "Registrarme"; btn.disabled = false;
+            }
+        };
+    </script>
+</body>
+
+</html>
