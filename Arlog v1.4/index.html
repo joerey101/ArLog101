@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,116 +8,149 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Inter', sans-serif; }</style>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
+
 <body class="bg-slate-50 min-h-screen">
 
     <nav class="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-50">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <a href="index.html"><img src="arlogjobs_logo.png" class="h-10 w-auto mix-blend-multiply transition-transform hover:scale-105"></a>
+            <a href="index.html"><img src="arlogjobs_logo.png"
+                    class="h-10 w-auto mix-blend-multiply transition-transform hover:scale-105"></a>
             <div id="auth-zone" class="flex gap-4 items-center"></div>
         </div>
     </nav>
 
     <header class="bg-slate-900 py-20 px-6 text-center text-white relative overflow-hidden">
         <div class="max-w-4xl mx-auto relative z-10">
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-6 italic tracking-tight">Tu carrera logística despega aquí.</h1>
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-6 italic tracking-tight">Tu carrera logística despega
+                aquí.</h1>
             <div class="max-w-2xl mx-auto relative group">
-                <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors"></i>
-                <input type="text" id="searchInput" onkeyup="searchJobs()" placeholder="Buscar por puesto, área o ciudad..." class="w-full pl-14 pr-6 py-5 bg-white text-slate-900 border-0 rounded-2xl shadow-2xl outline-none ring-4 ring-transparent focus:ring-emerald-500/20 transition-all text-lg font-medium">
+                <i
+                    class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors"></i>
+                <input type="text" id="searchInput" onkeyup="searchJobs()"
+                    placeholder="Buscar por puesto, área o ciudad..."
+                    class="w-full pl-14 pr-6 py-5 bg-white text-slate-900 border-0 rounded-2xl shadow-2xl outline-none ring-4 ring-transparent focus:ring-emerald-500/20 transition-all text-lg font-medium">
             </div>
         </div>
         <div class="absolute inset-0 bg-emerald-500/5 opacity-50"></div>
     </header>
 
     <section class="max-w-6xl mx-auto -mt-8 relative z-20 px-6">
-        <div class="bg-white p-4 rounded-2xl shadow-xl border border-slate-100 flex flex-wrap gap-2 justify-center items-center">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mr-2 ml-4">Filtrar por etiqueta:</span>
-            <button onclick="filterByTag('todos')" class="tag-btn active bg-slate-900 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md">Todos</button>
-            <button onclick="filterByTag('Urgente')" class="tag-btn bg-slate-50 text-slate-600 px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-emerald-50 transition-all border border-slate-100">Urgente 🔥</button>
-            <button onclick="filterByTag('Zonal')" class="tag-btn bg-slate-50 text-slate-600 px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-emerald-50 transition-all border border-slate-100">Zonal 📍</button>
-            <button onclick="filterByTag('Manejo de Clark')" class="tag-btn bg-slate-50 text-slate-600 px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-emerald-50 transition-all border border-slate-100">Clark / Clarkista 🚜</button>
+        <div
+            class="bg-white p-4 rounded-2xl shadow-xl border border-slate-100 flex flex-wrap gap-2 justify-center items-center">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mr-2 ml-4">Filtrar por
+                etiqueta:</span>
+            <button onclick="filterByTag('todos')"
+                class="tag-btn active bg-slate-900 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md">Todos</button>
+            <button onclick="filterByTag('Urgente')"
+                class="tag-btn bg-slate-50 text-slate-600 px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-emerald-50 transition-all border border-slate-100">Urgente
+                🔥</button>
+            <button onclick="filterByTag('Zonal')"
+                class="tag-btn bg-slate-50 text-slate-600 px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-emerald-50 transition-all border border-slate-100">Zonal
+                📍</button>
+            <button onclick="filterByTag('Manejo de Clark')"
+                class="tag-btn bg-slate-50 text-slate-600 px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-emerald-50 transition-all border border-slate-100">Clark
+                / Clarkista 🚜</button>
         </div>
     </section>
 
     <main class="max-w-6xl mx-auto py-16 px-6">
         <div class="flex items-center justify-between mb-10 border-b border-slate-200 pb-6">
             <h2 class="text-2xl font-bold text-slate-800">Resultados encontrados</h2>
-            <span id="job-count" class="bg-emerald-100 text-emerald-700 text-xs font-bold px-4 py-1.5 rounded-full italic border border-emerald-200 uppercase">Cargando...</span>
+            <span id="job-count"
+                class="bg-emerald-100 text-emerald-700 text-xs font-bold px-4 py-1.5 rounded-full italic border border-emerald-200 uppercase">Cargando...</span>
         </div>
         <div id="jobs-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </main>
-
-    <div id="modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl relative animate-in fade-in zoom-in duration-300">
-            <button onclick="closeModal()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition-transform hover:rotate-90"><i class="fas fa-times text-xl"></i></button>
+    <!-- soy un mensaje -->
+    <div id="modal"
+        class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+        <div
+            class="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl relative animate-in fade-in zoom-in duration-300">
+            <button onclick="closeModal()"
+                class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition-transform hover:rotate-90"><i
+                    class="fas fa-times text-xl"></i></button>
             <h3 id="modal-title" class="text-2xl font-bold text-slate-900 mb-2 italic">Postular</h3>
             <p class="text-slate-500 mb-8 font-medium">Completa tu aplicación para este puesto.</p>
             <form id="applyForm" class="space-y-6">
                 <input type="hidden" id="jobIdField">
                 <input type="hidden" id="jobTitleField">
                 <div id="guest-fields" class="space-y-4">
-                    <input type="text" id="candName" placeholder="Nombre completo" class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
-                    <input type="email" id="candEmail" placeholder="Correo electrónico" class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                    <input type="text" id="candName" placeholder="Nombre completo"
+                        class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                    <input type="email" id="candEmail" placeholder="Correo electrónico"
+                        class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
-                <div id="user-info" class="hidden p-4 bg-emerald-50 border border-emerald-100 rounded-2xl text-center"><p class="text-sm text-emerald-800 font-bold italic">Postulando como: <span id="loggedName"></span></p></div>
-                <div><input type="file" id="cvFile" accept=".pdf" required class="block w-full text-xs text-slate-500 file:mr-4 file:py-3 file:px-6 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-slate-900 file:text-white cursor-pointer transition"></div>
-                <button type="submit" id="btnSubmit" class="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-emerald-600 transition-all shadow-xl shadow-slate-200">Enviar CV</button>
+                <div id="user-info" class="hidden p-4 bg-emerald-50 border border-emerald-100 rounded-2xl text-center">
+                    <p class="text-sm text-emerald-800 font-bold italic">Postulando como: <span id="loggedName"></span>
+                    </p>
+                </div>
+                <div><input type="file" id="cvFile" accept=".pdf" required
+                        class="block w-full text-xs text-slate-500 file:mr-4 file:py-3 file:px-6 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-slate-900 file:text-white cursor-pointer transition">
+                </div>
+                <button type="submit" id="btnSubmit"
+                    class="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-emerald-600 transition-all shadow-xl shadow-slate-200">Enviar
+                    CV</button>
             </form>
         </div>
-    </nav>
+        </nav>
 
-    <script>
-        let allJobs = []; 
-        let userApplications = []; // Historial para bloqueo visual
-        let isLogged = false;
-        let userData = {};
+        <script>
+            let allJobs = [];
+            let userApplications = []; // Historial para bloqueo visual
+            let isLogged = false;
+            let userData = {};
 
-        async function checkAuth() {
-            const res = await fetch('auth.php?action=check');
-            const data = await res.json();
-            const authZone = document.getElementById('auth-zone');
-            if(data.logged) {
-                isLogged = true; userData = data;
-                authZone.innerHTML = `<a href="perfil.php" class="text-sm font-bold text-slate-600 flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-xl hover:bg-slate-100 transition"><i class="fas fa-user-circle text-emerald-500"></i> Hola, ${data.nombre}</a>
+            async function checkAuth() {
+                const res = await fetch('auth.php?action=check');
+                const data = await res.json();
+                const authZone = document.getElementById('auth-zone');
+                if (data.logged) {
+                    isLogged = true; userData = data;
+                    authZone.innerHTML = `<a href="perfil.php" class="text-sm font-bold text-slate-600 flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-xl hover:bg-slate-100 transition"><i class="fas fa-user-circle text-emerald-500"></i> Hola, ${data.nombre}</a>
                                       <button onclick="logout()" class="ml-2 text-[10px] text-slate-400 font-bold uppercase hover:text-red-500">Salir</button>`;
-            } else {
-                authZone.innerHTML = `<button onclick="location.href='login.html'" class="text-sm font-bold text-slate-600">Ingresar</button>
+                } else {
+                    authZone.innerHTML = `<button onclick="location.href='login.html'" class="text-sm font-bold text-slate-600">Ingresar</button>
                                       <button onclick="location.href='registro.html'" class="bg-slate-900 text-white px-5 py-2.5 rounded-xl text-sm font-bold ml-4 hover:bg-emerald-600 transition">Crear Cuenta</button>`;
+                }
             }
-        }
 
-        async function loadJobs() {
-            try {
-                // Carga de empleos
-                const resJobs = await fetch('api_jobs.php');
-                const jsonJobs = await resJobs.json();
-                allJobs = jsonJobs.data;
+            async function loadJobs() {
+                try {
+                    // Carga de empleos
+                    const resJobs = await fetch('api_jobs.php');
+                    const jsonJobs = await resJobs.json();
+                    allJobs = jsonJobs.data;
 
-                // Carga de postulaciones previas para bloqueo visual si está logueado
-                if(isLogged) {
-                    const resApps = await fetch('api_my_applications.php');
-                    const jsonApps = await resApps.json();
-                    userApplications = jsonApps.data.map(app => parseInt(app.anuncio_id));
+                    // Carga de postulaciones previas para bloqueo visual si está logueado
+                    if (isLogged) {
+                        const resApps = await fetch('api_my_applications.php');
+                        const jsonApps = await resApps.json();
+                        userApplications = jsonApps.data.map(app => parseInt(app.anuncio_id));
+                    }
+
+                    renderJobs(allJobs);
+                } catch (e) { console.error("Error cargando datos:", e); }
+            }
+
+            function renderJobs(jobs) {
+                const container = document.getElementById('jobs-container');
+                document.getElementById('job-count').textContent = `${jobs.length} puestos`;
+
+                if (jobs.length === 0) {
+                    container.innerHTML = `<div class="col-span-full py-20 text-center"><i class="fas fa-search text-4xl text-slate-200 mb-4 block"></i><p class="text-slate-400 italic font-medium">No encontramos resultados.</p></div>`;
+                    return;
                 }
 
-                renderJobs(allJobs);
-            } catch (e) { console.error("Error cargando datos:", e); }
-        }
+                container.innerHTML = jobs.map(job => {
+                    const alreadyApplied = userApplications.includes(parseInt(job.id)); //
 
-        function renderJobs(jobs) {
-            const container = document.getElementById('jobs-container');
-            document.getElementById('job-count').textContent = `${jobs.length} puestos`;
-            
-            if(jobs.length === 0) {
-                container.innerHTML = `<div class="col-span-full py-20 text-center"><i class="fas fa-search text-4xl text-slate-200 mb-4 block"></i><p class="text-slate-400 italic font-medium">No encontramos resultados.</p></div>`;
-                return;
-            }
-
-            container.innerHTML = jobs.map(job => {
-                const alreadyApplied = userApplications.includes(parseInt(job.id)); //
-                
-                return `
+                    return `
                 <div class="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col justify-between group">
                     <div>
                         <div class="flex flex-wrap gap-2 mb-6">
@@ -128,87 +162,88 @@
                         <p class="text-slate-500 text-sm leading-relaxed mb-10 line-clamp-3">${job.descripcion}</p>
                     </div>
                     
-                    ${alreadyApplied ? 
-                        `<button disabled class="w-full py-4 bg-slate-100 text-slate-400 rounded-2xl font-bold text-sm cursor-not-allowed">
+                    ${alreadyApplied ?
+                            `<button disabled class="w-full py-4 bg-slate-100 text-slate-400 rounded-2xl font-bold text-sm cursor-not-allowed">
                             <i class="fas fa-check-circle mr-2"></i> Ya te postulaste
-                        </button>` : 
-                        `<button onclick="openApplyModal(${job.id}, '${job.titulo}')" class="w-full py-4 bg-slate-50 text-slate-900 rounded-2xl font-bold text-sm border border-slate-200 hover:bg-slate-900 hover:text-white transition-all transform active:scale-95 shadow-sm">
+                        </button>` :
+                            `<button onclick="openApplyModal(${job.id}, '${job.titulo}')" class="w-full py-4 bg-slate-50 text-slate-900 rounded-2xl font-bold text-sm border border-slate-200 hover:bg-slate-900 hover:text-white transition-all transform active:scale-95 shadow-sm">
                             Ver Detalles / Postular
                         </button>`
-                    }
+                        }
                 </div>
             `}).join('');
-        }
+            }
 
-        function searchJobs() {
-            const term = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = allJobs.filter(j => 
-                j.titulo.toLowerCase().includes(term) || 
-                j.descripcion.toLowerCase().includes(term) || 
-                (j.ubicacion && j.ubicacion.toLowerCase().includes(term)) ||
-                j.departamento.toLowerCase().includes(term)
-            );
-            renderJobs(filtered);
-        }
-
-        function filterByTag(tag) {
-            document.querySelectorAll('.tag-btn').forEach(btn => {
-                btn.classList.remove('bg-slate-900', 'text-white');
-                btn.classList.add('bg-slate-50', 'text-slate-600');
-            });
-            event.currentTarget.classList.add('bg-slate-900', 'text-white');
-            
-            if(tag === 'todos') {
-                renderJobs(allJobs);
-            } else {
-                const filtered = allJobs.filter(j => j.etiquetas && j.etiquetas.includes(tag));
+            function searchJobs() {
+                const term = document.getElementById('searchInput').value.toLowerCase();
+                const filtered = allJobs.filter(j =>
+                    j.titulo.toLowerCase().includes(term) ||
+                    j.descripcion.toLowerCase().includes(term) ||
+                    (j.ubicacion && j.ubicacion.toLowerCase().includes(term)) ||
+                    j.departamento.toLowerCase().includes(term)
+                );
                 renderJobs(filtered);
             }
-        }
 
-        function openApplyModal(id, title) {
-            document.getElementById('modal').classList.remove('hidden');
-            document.getElementById('modal-title').textContent = title;
-            document.getElementById('jobIdField').value = id;
-            document.getElementById('jobTitleField').value = title;
-            if(isLogged) {
-                document.getElementById('guest-fields').classList.add('hidden');
-                document.getElementById('user-info').classList.remove('hidden');
-                document.getElementById('loggedName').textContent = userData.nombre;
-            }
-        }
+            function filterByTag(tag) {
+                document.querySelectorAll('.tag-btn').forEach(btn => {
+                    btn.classList.remove('bg-slate-900', 'text-white');
+                    btn.classList.add('bg-slate-50', 'text-slate-600');
+                });
+                event.currentTarget.classList.add('bg-slate-900', 'text-white');
 
-        function closeModal() { document.getElementById('modal').classList.add('hidden'); }
-        
-        document.getElementById('applyForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btnSubmit');
-            btn.disabled = true; btn.textContent = "Procesando...";
-            
-            const formData = new FormData();
-            formData.append('file', document.getElementById('cvFile').files[0]);
-            formData.append('job_id', document.getElementById('jobIdField').value);
-            
-            if(!isLogged) {
-                formData.append('candidate_name', document.getElementById('candName').value);
-                formData.append('candidate_email', document.getElementById('candEmail').value);
+                if (tag === 'todos') {
+                    renderJobs(allJobs);
+                } else {
+                    const filtered = allJobs.filter(j => j.etiquetas && j.etiquetas.includes(tag));
+                    renderJobs(filtered);
+                }
             }
 
-            try {
-                const res = await fetch('upload.php', { method: 'POST', body: formData });
-                const data = await res.json();
-                alert(data.message);
-                if(data.success) location.reload();
-            } catch (e) { alert("Error de conexión"); }
-            
-            btn.disabled = false; btn.textContent = "Enviar CV";
-        };
+            function openApplyModal(id, title) {
+                document.getElementById('modal').classList.remove('hidden');
+                document.getElementById('modal-title').textContent = title;
+                document.getElementById('jobIdField').value = id;
+                document.getElementById('jobTitleField').value = title;
+                if (isLogged) {
+                    document.getElementById('guest-fields').classList.add('hidden');
+                    document.getElementById('user-info').classList.remove('hidden');
+                    document.getElementById('loggedName').textContent = userData.nombre;
+                }
+            }
 
-        async function logout() { await fetch('auth.php?action=logout'); location.reload(); }
-        window.onload = async () => { 
-            await checkAuth(); 
-            await loadJobs(); 
-        };
-    </script>
+            function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+
+            document.getElementById('applyForm').onsubmit = async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('btnSubmit');
+                btn.disabled = true; btn.textContent = "Procesando...";
+
+                const formData = new FormData();
+                formData.append('file', document.getElementById('cvFile').files[0]);
+                formData.append('job_id', document.getElementById('jobIdField').value);
+
+                if (!isLogged) {
+                    formData.append('candidate_name', document.getElementById('candName').value);
+                    formData.append('candidate_email', document.getElementById('candEmail').value);
+                }
+
+                try {
+                    const res = await fetch('upload.php', { method: 'POST', body: formData });
+                    const data = await res.json();
+                    alert(data.message);
+                    if (data.success) location.reload();
+                } catch (e) { alert("Error de conexión"); }
+
+                btn.disabled = false; btn.textContent = "Enviar CV";
+            };
+
+            async function logout() { await fetch('auth.php?action=logout'); location.reload(); }
+            window.onload = async () => {
+                await checkAuth();
+                await loadJobs();
+            };
+        </script>
 </body>
+
 </html>
