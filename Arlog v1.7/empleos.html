@@ -7,337 +7,432 @@
     <title>Arlog Jobs | Buscador de Empleos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Inter:wght@400;500;700&display=swap"
+        rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
         }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Clash Display', sans-serif;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-bg {
+            background-color: #0f172a;
+            background-image: radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+                radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
     </style>
 </head>
 
-<body class="bg-slate-50 min-h-screen">
+<body class="hero-bg min-h-screen text-white">
 
-    <nav class="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <a href="index.html"><img src="arlogjobs_logo.png"
-                    class="h-10 w-auto mix-blend-multiply transition-transform hover:scale-105"></a>
-            <div id="auth-zone" class="flex gap-4 items-center"></div>
+    <!-- Navbar (Glass) -->
+    <nav
+        class="p-6 flex justify-between items-center glass sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-white/10">
+        <div class="flex items-center gap-3">
+            <a href="index.php">
+                <img src="arlogjobs_logo.png" alt="ArLog Jobs Logo"
+                    class="h-10 md:h-12 hover:scale-105 transition-transform duration-300">
+            </a>
+        </div>
+        <div id="auth-zone" class="flex gap-4 items-center">
+            <!-- Auth buttons will be injected here -->
         </div>
     </nav>
 
-    <header class="bg-slate-900 py-20 px-6 text-center text-white relative overflow-hidden">
+    <!-- Header Search -->
+    <header class="py-16 px-4 text-center relative overflow-hidden">
         <div class="max-w-4xl mx-auto relative z-10">
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-6 italic tracking-tight">Tu carrera logística despega
-                aquí.</h1>
+            <h1 class="text-4xl md:text-6xl font-bold mb-8 leading-tight">
+                Tu próximo desafío <br>
+                <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">logístico</span>
+                te espera.
+            </h1>
+
             <div class="max-w-2xl mx-auto relative group">
                 <i
-                    class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors"></i>
+                    class="fas fa-search absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-400 transition-colors z-20"></i>
                 <input type="text" id="searchInput" onkeyup="searchJobs()"
                     placeholder="Buscar por puesto, área o ciudad..."
-                    class="w-full pl-14 pr-6 py-5 bg-white text-slate-900 border-0 rounded-2xl shadow-2xl outline-none ring-4 ring-transparent focus:ring-emerald-500/20 transition-all text-lg font-medium">
+                    class="w-full pl-14 pr-6 py-5 bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl text-white placeholder-slate-400 outline-none ring-2 ring-transparent focus:ring-emerald-500/50 transition-all text-lg font-medium shadow-2xl">
             </div>
         </div>
-        <div class="absolute inset-0 bg-emerald-500/5 opacity-50"></div>
     </header>
 
-    <section class="max-w-6xl mx-auto -mt-8 relative z-20 px-6">
-        <div
-            class="bg-white p-4 rounded-2xl shadow-xl border border-slate-100 flex flex-wrap gap-2 justify-center items-center">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mr-2 ml-4">Filtrar por
-                etiqueta:</span>
+    <!-- Filters -->
+    <section class="max-w-6xl mx-auto -mt-4 relative z-20 px-4 mb-12">
+        <div class="glass p-3 rounded-2xl flex flex-wrap gap-2 justify-center items-center">
+            <span
+                class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mr-2 ml-2 hidden md:block">Filtrar:</span>
             <button onclick="filterByTag('todos')"
-                class="tag-btn active bg-slate-900 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md">Todos</button>
+                class="tag-btn active px-4 py-2 rounded-xl text-xs font-bold transition-all bg-emerald-500 text-white shadow-lg shadow-emerald-500/20">Todos</button>
             <button onclick="filterByTag('Urgente')"
-                class="tag-btn bg-slate-50 text-slate-600 px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-emerald-50 transition-all border border-slate-100">Urgente
+                class="tag-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">Urgente
                 🔥</button>
             <button onclick="filterByTag('Zonal')"
-                class="tag-btn bg-slate-50 text-slate-600 px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-emerald-50 transition-all border border-slate-100">Zonal
+                class="tag-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">Zonal
                 📍</button>
             <button onclick="filterByTag('Manejo de Clark')"
-                class="tag-btn bg-slate-50 text-slate-600 px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-emerald-50 transition-all border border-slate-100">Clark
-                / Clarkista 🚜</button>
+                class="tag-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5">Clarkista
+                🚜</button>
         </div>
     </section>
 
-    <main class="max-w-6xl mx-auto py-16 px-6">
-        <div class="flex items-center justify-between mb-10 border-b border-slate-200 pb-6">
-            <h2 class="text-2xl font-bold text-slate-800">Resultados encontrados</h2>
+    <!-- Results -->
+    <main class="max-w-6xl mx-auto pb-20 px-4">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-white/5">
+            <h2 class="text-2xl font-bold text-white">Resultados</h2>
             <span id="job-count"
-                class="bg-emerald-100 text-emerald-700 text-xs font-bold px-4 py-1.5 rounded-full italic border border-emerald-200 uppercase">Cargando...</span>
+                class="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-4 py-1.5 rounded-full border border-emerald-500/20 uppercase tracking-wider">Cargando...</span>
         </div>
-        <div id="jobs-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        <div id="jobs-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
-    <!-- soy un mensaje -->
+
+    <!-- Modal Application -->
     <div id="modal"
-        class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+        class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
         <div
-            class="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl relative animate-in fade-in zoom-in duration-300">
+            class="glass bg-slate-900/90 rounded-3xl max-w-lg w-full p-8 shadow-2xl relative border border-white/10 transform transition-all">
             <button onclick="closeModal()"
-                class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition-transform hover:rotate-90"><i
-                    class="fas fa-times text-xl"></i></button>
-            <h3 id="modal-title" class="text-2xl font-bold text-slate-900 mb-2 italic">Postular</h3>
-            <p class="text-slate-500 mb-8 font-medium">Completa tu aplicación para este puesto.</p>
+                class="absolute top-6 right-6 text-slate-400 hover:text-white transition-transform hover:rotate-90">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+
+            <h3 id="modal-title" class="text-2xl font-bold text-white mb-2">Postular</h3>
+            <p class="text-slate-400 mb-8 text-sm">Completa tu aplicación para este puesto.</p>
+
             <form id="applyForm" class="space-y-6">
                 <input type="hidden" id="jobIdField">
                 <input type="hidden" id="jobTitleField">
+
                 <div id="guest-fields" class="space-y-4">
                     <input type="text" id="candName" placeholder="Nombre completo"
-                        class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                        class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-emerald-500/50 transition">
                     <input type="email" id="candEmail" placeholder="Correo electrónico"
-                        class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                        class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white outline-none focus:border-emerald-500/50 transition">
                 </div>
-                <div id="user-info" class="hidden p-4 bg-emerald-50 border border-emerald-100 rounded-2xl text-center">
-                    <p class="text-sm text-emerald-800 font-bold italic">Postulando como: <span id="loggedName"></span>
-                    </p>
-                </div>
-                <!-- Sección de Selección de CV (Solo visible si tiene CV guardado) -->
-                <div id="cv-selection-zone" class="hidden mb-6">
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Selecciona tu CV</label>
 
-                    <!-- Opción 1: Usar Guardado -->
+                <div id="user-info"
+                    class="hidden p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center">
+                    <p class="text-sm text-emerald-400 font-bold">Postulando como: <span id="loggedName"
+                            class="text-white"></span></p>
+                </div>
+
+                <!-- CV Selection -->
+                <div id="cv-selection-zone" class="hidden mb-6">
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-3">Selecciona tu CV</label>
+
                     <label
-                        class="flex items-center gap-3 p-4 border border-emerald-200 bg-emerald-50 rounded-xl cursor-pointer mb-2 transition hover:bg-emerald-100">
+                        class="flex items-center gap-3 p-4 border border-emerald-500/30 bg-emerald-500/10 rounded-xl cursor-pointer mb-3 transition hover:bg-emerald-500/20">
                         <input type="radio" name="cv_option" value="saved" checked
-                            class="text-emerald-600 focus:ring-emerald-500">
+                            class="text-emerald-500 focus:ring-emerald-500 bg-transparent border-white/20">
                         <div class="flex-1">
-                            <p class="text-sm font-bold text-emerald-900">Usar mi CV Base</p>
-                            <p class="text-[10px] text-emerald-600">Guardado en tu perfil</p>
+                            <p class="text-sm font-bold text-emerald-400">Usar mi CV Base</p>
+                            <p class="text-[10px] text-slate-400">Guardado en tu perfil</p>
                         </div>
                         <i class="fas fa-file-pdf text-emerald-500 text-xl"></i>
                     </label>
 
-                    <!-- Opción 2: Subir Nuevo -->
                     <label
-                        class="flex items-center gap-3 p-4 border border-slate-200 bg-white rounded-xl cursor-pointer transition hover:bg-slate-50">
-                        <input type="radio" name="cv_option" value="new" class="text-slate-600 focus:ring-slate-500">
+                        class="flex items-center gap-3 p-4 border border-white/10 bg-white/5 rounded-xl cursor-pointer transition hover:bg-white/10">
+                        <input type="radio" name="cv_option" value="new"
+                            class="text-slate-400 focus:ring-slate-500 bg-transparent border-white/20">
                         <div class="flex-1">
-                            <p class="text-sm font-bold text-slate-700">Subir uno nuevo</p>
+                            <p class="text-sm font-bold text-white">Subir uno nuevo</p>
                             <p class="text-[10px] text-slate-400">PDF (Máx 5MB)</p>
                         </div>
                         <i class="fas fa-upload text-slate-400 text-xl"></i>
                     </label>
                 </div>
 
-                <!-- Input File Tradicional (Se oculta si elige 'saved') -->
+                <!-- File Input -->
                 <div id="file-input-zone">
                     <input type="file" id="cvFile" accept=".pdf"
-                        class="block w-full text-xs text-slate-500 file:mr-4 file:py-3 file:px-6 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-slate-900 file:text-white cursor-pointer transition">
+                        class="block w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-white/10 file:text-white hover:file:bg-white/20 cursor-pointer transition">
                 </div>
 
                 <button type="submit" id="btnSubmit"
-                    class="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-emerald-600 transition-all shadow-xl shadow-slate-200">
+                    class="w-full py-4 bg-gradient-to-r from-emerald-500 to-cyan-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-emerald-500/20 transition-all transform hover:scale-[1.02]">
                     Enviar Postulación
                 </button>
             </form>
         </div>
-        </nav>
+    </div>
 
-        <script>
-            let allJobs = [];
-            let userApplications = []; // Historial para bloqueo visual
-            let isLogged = false;
-            let userData = {};
+    <script>
+        let allJobs = [];
+        let userApplications = [];
+        let isLogged = false;
+        let userData = {};
 
-            async function checkAuth() {
-                const res = await fetch('auth.php?action=check');
-                const data = await res.json();
-                const authZone = document.getElementById('auth-zone');
-                if (data.logged) {
-                    isLogged = true; userData = data;
-                    authZone.innerHTML = `<a href="perfil.php" class="text-sm font-bold text-slate-600 flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-xl hover:bg-slate-100 transition"><i class="fas fa-user-circle text-emerald-500"></i> Hola, ${data.nombre}</a>
-                                      <button onclick="logout()" class="ml-2 text-[10px] text-slate-400 font-bold uppercase hover:text-red-500">Salir</button>`;
-                } else {
-                    authZone.innerHTML = `<button onclick="location.href='login.html'" class="text-sm font-bold text-slate-600">Ingresar</button>
-                                      <button onclick="location.href='registro.html'" class="bg-slate-900 text-white px-5 py-2.5 rounded-xl text-sm font-bold ml-4 hover:bg-emerald-600 transition">Crear Cuenta</button>`;
-                }
+        async function checkAuth() {
+            const res = await fetch('auth.php?action=check');
+            const data = await res.json();
+            const authZone = document.getElementById('auth-zone');
+            if (data.logged) {
+                isLogged = true; userData = data;
+                authZone.innerHTML = `
+                        <a href="perfil.php" class="text-xs font-bold text-white flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full hover:bg-emerald-500 hover:text-white transition border border-white/5">
+                            <i class="fas fa-user-circle"></i> ${data.nombre}
+                        </a>
+                        <button onclick="logout()" class="text-[10px] text-slate-400 font-bold uppercase hover:text-red-400 transition ml-2">Salir</button>
+                    `;
+            } else {
+                authZone.innerHTML = `
+                        <button onclick="location.href='login_candidato.html'" class="text-sm font-bold text-white hover:text-emerald-400 transition">Ingresar</button>
+                        <button onclick="location.href='registro.html'" class="hidden md:block bg-emerald-500 text-white px-5 py-2 rounded-full text-sm font-bold ml-4 hover:bg-emerald-400 transition shadow-lg shadow-emerald-500/20">Crear Cuenta</button>
+                    `;
             }
+        }
 
-            async function loadJobs() {
-                try {
-                    // Carga de empleos (Cache busting added)
-                    const resJobs = await fetch('api_jobs.php?t=' + Date.now());
-                    const jsonJobs = await resJobs.json();
-                    allJobs = jsonJobs.data;
+        async function loadJobs() {
+            try {
+                const resJobs = await fetch('api_jobs.php?t=' + Date.now());
+                const jsonJobs = await resJobs.json();
+                allJobs = jsonJobs.data;
 
-                    // Carga de postulaciones previas para bloqueo visual si está logueado
-                    if (isLogged) {
-                        const resApps = await fetch('api_my_applications.php');
-                        const jsonApps = await resApps.json();
-                        userApplications = jsonApps.data.map(app => parseInt(app.anuncio_id));
+                if (isLogged) {
+                    const resApps = await fetch('api_my_applications.php');
+                    const jsonApps = await resApps.json();
+                    userApplications = jsonApps.data.map(app => parseInt(app.anuncio_id));
+                }
+
+                // Check URL Params for Search
+                const urlParams = new URLSearchParams(window.location.search);
+                const query = urlParams.get('q');
+                const loc = urlParams.get('location');
+                const cat = urlParams.get('cat');
+
+                if (query || loc || cat) {
+                    // Apply filters immediately
+                    let filtered = allJobs;
+                    if (query) {
+                        const q = query.toLowerCase();
+                        filtered = filtered.filter(j =>
+                            j.titulo.toLowerCase().includes(q) || j.descripcion.toLowerCase().includes(q) || j.departamento.toLowerCase().includes(q)
+                        );
+                        document.getElementById('searchInput').value = query; // Fill input
                     }
-
+                    if (loc) {
+                        const l = loc.toLowerCase();
+                        filtered = filtered.filter(j => j.ubicacion && j.ubicacion.toLowerCase().includes(l));
+                    }
+                    if (cat) {
+                        // Simple mapping for demo categories
+                        const c = cat.toLowerCase();
+                        filtered = filtered.filter(j => {
+                            if (c === 'transporte') return j.departamento.toLowerCase().includes('transporte') || j.titulo.toLowerCase().includes('chofer');
+                            if (c === 'deposito') return j.departamento.toLowerCase().includes('almacén') || j.departamento.toLowerCase().includes('depósito') || j.titulo.toLowerCase().includes('clark');
+                            if (c === 'admin') return j.departamento.toLowerCase().includes('compras') || j.departamento.toLowerCase().includes('rrhh') || j.titulo.toLowerCase().includes('analista');
+                            if (c === 'tecnico') return j.titulo.toLowerCase().includes('tecnico') || j.titulo.toLowerCase().includes('mantenimiento');
+                            return true;
+                        });
+                    }
+                    renderJobs(filtered);
+                } else {
                     renderJobs(allJobs);
-                } catch (e) { console.error("Error cargando datos:", e); }
-            }
-
-            function renderJobs(jobs) {
-                const container = document.getElementById('jobs-container');
-                document.getElementById('job-count').textContent = `${jobs.length} puestos`;
-
-                if (jobs.length === 0) {
-                    container.innerHTML = `<div class="col-span-full py-20 text-center"><i class="fas fa-search text-4xl text-slate-200 mb-4 block"></i><p class="text-slate-400 italic font-medium">No encontramos resultados.</p></div>`;
-                    return;
                 }
 
-                container.innerHTML = jobs.map(job => {
-                    const alreadyApplied = userApplications.includes(parseInt(job.id)); //
+            } catch (e) { console.error("Error cargando datos:", e); }
+        }
 
-                    return `
-                <div class="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col justify-between group">
+        function renderJobs(jobs) {
+            const container = document.getElementById('jobs-container');
+            document.getElementById('job-count').textContent = `${jobs.length} puestos`;
+
+            if (jobs.length === 0) {
+                container.innerHTML = `<div class="col-span-full py-20 text-center"><i class="fas fa-search text-4xl text-slate-600 mb-4 block"></i><p class="text-slate-400 italic">No encontramos resultados para tu búsqueda.</p></div>`;
+                return;
+            }
+
+            container.innerHTML = jobs.map(job => {
+                const alreadyApplied = userApplications.includes(parseInt(job.id));
+
+                return `
+                <div class="glass p-8 rounded-3xl border border-white/5 hover:border-emerald-500/30 hover:bg-white/5 transition-all duration-300 flex flex-col justify-between group h-full">
                     <div>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="bg-emerald-50 text-emerald-700 text-[9px] font-extrabold px-3 py-1.5 rounded-lg uppercase border border-emerald-100">${job.departamento}</span>
-                            ${job.etiquetas ? job.etiquetas.map(t => `<span class="bg-slate-100 text-slate-500 text-[9px] font-extrabold px-3 py-1.5 rounded-lg uppercase border border-slate-200 italic">${t}</span>`).join('') : ''}
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wide border border-emerald-500/20">${job.departamento}</span>
+                            ${job.etiquetas ? job.etiquetas.map(t => `<span class="bg-white/10 text-slate-300 text-[10px] font-bold px-3 py-1 rounded-full uppercase border border-white/5 whitespace-nowrap">${t}</span>`).join('') : ''}
                         </div>
-                        <h3 class="text-2xl font-bold text-slate-900 mb-3 group-hover:text-emerald-600 transition-colors leading-tight">${job.titulo}</h3>
-                        <p class="text-slate-400 text-xs mb-6 font-semibold"><i class="fas fa-map-marker-alt text-emerald-500 mr-1"></i> ${job.ubicacion || 'A confirmar'}</p>
-                        <p class="text-slate-500 text-sm leading-relaxed mb-10 line-clamp-3">${job.descripcion}</p>
+                        <h3 class="text-xl md:text-2xl font-bold text-white mb-2 leading-tight group-hover:text-emerald-400 transition-colors">${job.titulo}</h3>
+                        <p class="text-slate-400 text-xs mb-4 font-medium uppercase tracking-wide"><i class="fas fa-map-marker-alt text-cyan-400 mr-1"></i> ${job.ubicacion || 'Ubicación no especificada'}</p>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-8 line-clamp-3 font-light">${job.descripcion}</p>
                     </div>
                     
                     ${alreadyApplied ?
-                            `<button disabled class="w-full py-4 bg-slate-100 text-slate-400 rounded-2xl font-bold text-sm cursor-not-allowed">
-                            <i class="fas fa-check-circle mr-2"></i> Ya te postulaste
+                        `<button disabled class="w-full py-3 bg-white/5 text-slate-500 rounded-xl font-bold text-sm cursor-not-allowed border border-white/5">
+                            <i class="fas fa-check-circle mr-2"></i> Ya postulado
                         </button>` :
-                            `<button onclick="openApplyModal(${job.id}, '${job.titulo}')" class="w-full py-4 bg-slate-50 text-slate-900 rounded-2xl font-bold text-sm border border-slate-200 hover:bg-slate-900 hover:text-white transition-all transform active:scale-95 shadow-sm">
-                            Ver Detalles / Postular
+                        `<button onclick="openApplyModal(${job.id}, '${job.titulo}')" class="w-full py-3 bg-white text-slate-900 rounded-xl font-bold text-sm hover:bg-emerald-500 hover:text-white transition-all shadow-lg hover:shadow-emerald-500/25">
+                            Ver Detalles
                         </button>`
-                        }
+                    }
                 </div>
             `}).join('');
-            }
+        }
 
-            function searchJobs() {
-                const term = document.getElementById('searchInput').value.toLowerCase();
-                const filtered = allJobs.filter(j =>
-                    j.titulo.toLowerCase().includes(term) ||
-                    j.descripcion.toLowerCase().includes(term) ||
-                    (j.ubicacion && j.ubicacion.toLowerCase().includes(term)) ||
-                    j.departamento.toLowerCase().includes(term)
-                );
+        function searchJobs() {
+            const term = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allJobs.filter(j =>
+                j.titulo.toLowerCase().includes(term) ||
+                j.descripcion.toLowerCase().includes(term) ||
+                (j.ubicacion && j.ubicacion.toLowerCase().includes(term)) ||
+                j.departamento.toLowerCase().includes(term)
+            );
+            renderJobs(filtered);
+        }
+
+        function filterByTag(tag) {
+            document.querySelectorAll('.tag-btn').forEach(btn => {
+                // Reset to unassigned style
+                btn.classList.remove('bg-emerald-500', 'text-white', 'shadow-lg');
+                btn.classList.add('bg-white/5', 'text-slate-300');
+            });
+            // Set active style
+            event.currentTarget.classList.remove('bg-white/5', 'text-slate-300');
+            event.currentTarget.classList.add('bg-emerald-500', 'text-white', 'shadow-lg');
+
+            if (tag === 'todos') {
+                renderJobs(allJobs);
+            } else {
+                const filtered = allJobs.filter(j => j.etiquetas && j.etiquetas.includes(tag));
                 renderJobs(filtered);
             }
+        }
 
-            function filterByTag(tag) {
-                document.querySelectorAll('.tag-btn').forEach(btn => {
-                    btn.classList.remove('bg-slate-900', 'text-white');
-                    btn.classList.add('bg-slate-50', 'text-slate-600');
-                });
-                event.currentTarget.classList.add('bg-slate-900', 'text-white');
+        function openApplyModal(id, title) {
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('jobIdField').value = id;
+            document.getElementById('jobTitleField').value = title;
 
-                if (tag === 'todos') {
-                    renderJobs(allJobs);
+            const cvZone = document.getElementById('cv-selection-zone');
+            const fileZone = document.getElementById('file-input-zone');
+            const fileInput = document.getElementById('cvFile');
+
+            if (isLogged) {
+                document.getElementById('guest-fields').classList.add('hidden');
+                document.getElementById('user-info').classList.remove('hidden');
+                document.getElementById('loggedName').textContent = userData.nombre;
+
+                if (userData.has_cv) {
+                    cvZone.classList.remove('hidden');
+                    fileZone.classList.add('hidden');
+                    fileInput.required = false;
                 } else {
-                    const filtered = allJobs.filter(j => j.etiquetas && j.etiquetas.includes(tag));
-                    renderJobs(filtered);
-                }
-            }
-
-            function openApplyModal(id, title) {
-                document.getElementById('modal').classList.remove('hidden');
-                document.getElementById('modal-title').textContent = title;
-                document.getElementById('jobIdField').value = id;
-                document.getElementById('jobTitleField').value = title;
-
-                const cvZone = document.getElementById('cv-selection-zone');
-                const fileZone = document.getElementById('file-input-zone');
-                const fileInput = document.getElementById('cvFile');
-
-                if (isLogged) {
-                    document.getElementById('guest-fields').classList.add('hidden');
-                    document.getElementById('user-info').classList.remove('hidden');
-                    document.getElementById('loggedName').textContent = userData.nombre;
-
-                    // Lógica CV Guardado
-                    if (userData.has_cv) {
-                        cvZone.classList.remove('hidden');
-                        fileZone.classList.add('hidden'); // Ocultar por defecto si tiene guardado
-                        fileInput.required = false;
-                    } else {
-                        cvZone.classList.add('hidden');
-                        fileZone.classList.remove('hidden');
-                        fileInput.required = true;
-                    }
-                } else {
-                    // Guest logic
                     cvZone.classList.add('hidden');
                     fileZone.classList.remove('hidden');
                     fileInput.required = true;
-                    document.getElementById('guest-fields').classList.remove('hidden');
-                    document.getElementById('user-info').classList.add('hidden');
                 }
+            } else {
+                cvZone.classList.add('hidden');
+                fileZone.classList.remove('hidden');
+                fileInput.required = true;
+                document.getElementById('guest-fields').classList.remove('hidden');
+                document.getElementById('user-info').classList.add('hidden');
+            }
+        }
+
+        document.querySelectorAll('input[name="cv_option"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const fileZone = document.getElementById('file-input-zone');
+                const fileInput = document.getElementById('cvFile');
+                if (e.target.value === 'new') {
+                    fileZone.classList.remove('hidden');
+                    fileInput.required = true;
+                } else {
+                    fileZone.classList.add('hidden');
+                    fileInput.required = false;
+                }
+            });
+        });
+
+        function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+
+        document.getElementById('applyForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmit');
+            const originalText = btn.textContent;
+            btn.disabled = true; btn.textContent = "Procesando...";
+
+            const formData = new FormData();
+            formData.append('job_id', document.getElementById('jobIdField').value);
+
+            const useSaved = document.querySelector('input[name="cv_option"]:checked')?.value === 'saved';
+            const hasCvFile = document.getElementById('cvFile').files.length > 0;
+
+            if (isLogged && userData.has_cv && useSaved) {
+                formData.append('use_saved', 'true');
+            } else {
+                if (!hasCvFile) { alert("Debes adjuntar un archivo"); btn.disabled = false; btn.textContent = originalText; return; }
+                formData.append('file', document.getElementById('cvFile').files[0]);
             }
 
-            // Radio Button Logic
-            document.querySelectorAll('input[name="cv_option"]').forEach(radio => {
-                radio.addEventListener('change', (e) => {
-                    const fileZone = document.getElementById('file-input-zone');
-                    const fileInput = document.getElementById('cvFile');
-                    if (e.target.value === 'new') {
-                        fileZone.classList.remove('hidden');
-                        fileInput.required = true;
-                    } else {
-                        fileZone.classList.add('hidden');
-                        fileInput.required = false;
-                    }
-                });
-            });
+            if (!isLogged) {
+                formData.append('candidate_name', document.getElementById('candName').value);
+                formData.append('candidate_email', document.getElementById('candEmail').value);
+            }
 
-            function closeModal() { document.getElementById('modal').classList.add('hidden'); }
-
-            document.getElementById('applyForm').onsubmit = async (e) => {
-                e.preventDefault();
-                const btn = document.getElementById('btnSubmit');
-                btn.disabled = true; btn.textContent = "Procesando...";
-
-                const formData = new FormData();
-                formData.append('job_id', document.getElementById('jobIdField').value);
-
-                // Detectar si usa CV guardado
-                const useSaved = document.querySelector('input[name="cv_option"]:checked')?.value === 'saved';
-                const hasCvFile = document.getElementById('cvFile').files.length > 0;
-
-                if (isLogged && userData.has_cv && useSaved) {
-                    formData.append('use_saved', 'true');
-                } else {
-                    if (!hasCvFile) { alert("Debes adjuntar un archivo"); btn.disabled = false; return; }
-                    formData.append('file', document.getElementById('cvFile').files[0]);
-                }
-
-                if (!isLogged) {
-                    formData.append('candidate_name', document.getElementById('candName').value);
-                    formData.append('candidate_email', document.getElementById('candEmail').value);
-                }
+            try {
+                const res = await fetch('upload.php', { method: 'POST', body: formData });
+                const text = await res.text();
 
                 try {
-                    const res = await fetch('upload.php', { method: 'POST', body: formData });
-                    const text = await res.text(); // Get raw text first
-
-                    try {
-                        const data = JSON.parse(text); // Try manually parsing
-                        if (!data.success) {
-                            alert(data.message);
-                        } else {
-                            alert(data.message);
-                            location.reload();
-                        }
-                    } catch (jsonErr) {
-                        console.error("JSON Error:", text);
-                        alert("Error del servidor (Respuesta inválida): " + text.substring(0, 50));
+                    const data = JSON.parse(text);
+                    if (!data.success) {
+                        alert(data.message);
+                    } else {
+                        alert(data.message);
+                        closeModal();
+                        // Optional: reload or update UI
                     }
-
-                } catch (e) {
-                    alert("Error catastrófico de conexión: " + e.message);
+                } catch (jsonErr) {
+                    console.error("JSON Error:", text);
+                    alert("Error del servidor (Respuesta inválida): " + text.substring(0, 50));
                 }
 
-                btn.disabled = false; btn.textContent = "Enviar Postulación";
-            };
+            } catch (e) {
+                alert("Error catastrófico de conexión: " + e.message);
+            }
 
-            async function logout() { await fetch('auth.php?action=logout'); window.location.href = 'index.php'; }
-            window.onload = async () => {
-                await checkAuth();
-                await loadJobs();
-            };
-        </script>
+            btn.disabled = false; btn.textContent = originalText;
+        };
+
+        async function logout() { await fetch('auth.php?action=logout'); window.location.href = 'index.php'; }
+
+        window.onload = async () => {
+            await checkAuth();
+            await loadJobs();
+        };
+    </script>
 </body>
 
 </html>

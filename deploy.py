@@ -7,7 +7,7 @@ import getpass
 HOSTNAME = "iad1-shared-b8-38.dreamhost.com"
 USERNAME = "josearlog"
 PORT = 22
-LOCAL_DIR = os.path.join(os.getcwd(), "Arlog v1.4")
+LOCAL_DIR = os.path.join(os.getcwd(), "Arlog v1.8")
 REMOTE_DIR = "arlogjobs.joserey101.com"
 
 def upload_files(sftp, local_dir, remote_dir):
@@ -51,7 +51,9 @@ def upload_files(sftp, local_dir, remote_dir):
 
 def main():
     try:
-        password = getpass.getpass(f"Enter password for {USERNAME}@{HOSTNAME}: ")
+        # Pasword provista por el usuario para automatizar
+        password = "Miami128!Roxette" 
+        # password = getpass.getpass(f"Enter password for {USERNAME}@{HOSTNAME}: ")
         
         print(f"Connecting to {HOSTNAME}...")
         transport = paramiko.Transport((HOSTNAME, PORT))

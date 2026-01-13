@@ -63,120 +63,195 @@ $dashboardLink = ($userRol === 'empresa') ? 'dashboard_empresa.php' : 'empleos.h
 <body class="hero-bg min-h-screen text-white flex flex-col">
 
     <!-- Navbar -->
-    <nav class="p-6 flex justify-between items-center glass sticky top-0 z-50 bg-slate-900/80">
-        <div class="flex items-center gap-2">
-            <div
-                class="w-8 h-8 bg-gradient-to-br from-emerald-400 to-cyan-500 rounded-lg flex items-center justify-center font-bold text-slate-900">
-                A</div>
-            <span class="text-xl font-bold tracking-tight">ArLog <span class="text-emerald-400">Jobs</span></span>
+    <nav
+        class="p-6 flex justify-between items-center glass sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-white/10">
+        <div class="flex items-center gap-3">
+            <img src="arlogjobs_logo.png" alt="ArLog Jobs Logo"
+                class="h-10 md:h-12 hover:scale-105 transition-transform duration-300">
         </div>
         <div>
             <?php if ($isLogged): ?>
                 <a href="<?php echo $dashboardLink; ?>"
-                    class="px-5 py-2 bg-white text-slate-900 rounded-full font-bold text-sm hover:bg-emerald-50 transition">
+                    class="px-5 py-2 bg-white text-slate-900 rounded-full font-bold text-sm hover:bg-emerald-50 transition border border-transparent hover:border-emerald-200">
                     Ir a mi Dashboard <i class="fas fa-arrow-right ml-2"></i>
                 </a>
             <?php else: ?>
-                <span class="text-sm text-slate-400 font-medium tracking-wide uppercase">Plataforma de Talento
-                    Logístico</span>
+                <div class="hidden md:flex gap-4">
+                    <a href="login_empresa.html"
+                        class="text-slate-300 hover:text-white text-sm font-medium transition py-2">Soy Empresa</a>
+                    <a href="login_candidato.html"
+                        class="px-5 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 rounded-full font-bold text-sm transition">
+                        Ingresar
+                    </a>
+                </div>
+                <div class="md:hidden">
+                    <a href="login_candidato.html" class="text-emerald-400 font-bold"><i
+                            class="fas fa-user-circle text-2xl"></i></a>
+                </div>
             <?php endif; ?>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="flex-1 container mx-auto px-4 py-16 flex flex-col items-center justify-center text-center">
+    <main
+        class="flex-1 container mx-auto px-4 py-12 md:py-20 flex flex-col items-center justify-start text-center min-h-[80vh]">
 
         <!-- Hero Text -->
         <span
             class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-xs font-bold uppercase tracking-widest mb-6 inline-block">
-            v1.7 Release
+            v1.7 Visual Update
         </span>
-        <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight max-w-4xl mx-auto">
+        <h1 class="text-5xl md:text-7xl font-bold mb-8 leading-tight max-w-5xl mx-auto">
             El Hub del Talento <br>
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Logístico &
+            <span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 animate-gradient">Logístico
+                &
                 Operativo</span>.
         </h1>
-        <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-12">
-            Conectamos a las empresas líderes con los profesionales que mueven el mundo. Simple, rápido y efectivo.
-        </p>
 
-        <!-- Stats Grid -->
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 mb-16 w-full max-w-3xl">
-            <div class="p-4 glass rounded-2xl">
-                <p class="text-3xl font-bold text-white">
-                    <?php echo $stats['anuncios']; ?>
-                </p>
-                <p class="text-xs text-slate-400 uppercase font-bold tracking-wider">Oportunidades</p>
-            </div>
-            <div class="p-4 glass rounded-2xl">
-                <p class="text-3xl font-bold text-emerald-400">
-                    <?php echo $stats['candidatos']; ?>
-                </p>
-                <p class="text-xs text-slate-400 uppercase font-bold tracking-wider">Talentos</p>
-            </div>
-            <div class="p-4 glass rounded-2xl hidden md:block">
-                <p class="text-3xl font-bold text-cyan-400">
-                    <?php echo $stats['empresas']; ?>
-                </p>
-                <p class="text-xs text-slate-400 uppercase font-bold tracking-wider">Empresas</p>
+        <!-- Search Bar Section -->
+        <div class="w-full max-w-4xl mx-auto mb-12 relative z-10">
+            <form action="empleos.html" method="GET"
+                class="glass p-2 rounded-3xl flex flex-col md:flex-row items-center gap-2 border border-white/10 shadow-2xl shadow-emerald-500/10">
+                <div class="flex-1 w-full relative group">
+                    <i
+                        class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-400 transition"></i>
+                    <input type="text" name="q" placeholder="¿Qué estás buscando? (Ej: Clarkista)"
+                        class="w-full bg-transparent text-white placeholder-slate-500 pl-12 pr-4 py-4 rounded-2xl focus:outline-none focus:bg-white/5 transition">
+                </div>
+                <div class="hidden md:block w-px h-10 bg-white/10"></div>
+                <div class="flex-1 w-full relative group">
+                    <i
+                        class="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-cyan-400 transition"></i>
+                    <input type="text" name="location" placeholder="Ubicación (Ej: Pilar)"
+                        class="w-full bg-transparent text-white placeholder-slate-500 pl-12 pr-4 py-4 rounded-2xl focus:outline-none focus:bg-white/5 transition">
+                </div>
+                <button type="submit"
+                    class="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white font-bold rounded-2xl transition-all hover:scale-105 shadow-lg shadow-emerald-500/25">
+                    Buscar
+                </button>
+            </form>
+        </div>
+
+        <!-- Categories Rectangles -->
+        <div class="w-full max-w-5xl mx-auto mb-20">
+            <p class="text-slate-400 text-sm font-medium uppercase tracking-wider mb-6">Categorías Populares</p>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Card 1 -->
+                <a href="empleos.html?cat=transporte"
+                    class="group glass p-4 rounded-xl border border-white/5 hover:border-emerald-500/30 hover:bg-white/5 transition flex items-center md:flex-col md:items-start gap-4">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition">
+                        <i class="fas fa-truck text-xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <h3 class="text-white font-bold text-lg group-hover:text-emerald-300 transition">Transporte</h3>
+                        <p class="text-slate-500 text-xs">Choferes, Reparto</p>
+                    </div>
+                    <div class="ml-auto md:hidden text-slate-500">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+
+                <!-- Card 2 -->
+                <a href="empleos.html?cat=deposito"
+                    class="group glass p-4 rounded-xl border border-white/5 hover:border-cyan-500/30 hover:bg-white/5 transition flex items-center md:flex-col md:items-start gap-4">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition">
+                        <i class="fas fa-warehouse text-xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <h3 class="text-white font-bold text-lg group-hover:text-cyan-300 transition">Depósito</h3>
+                        <p class="text-slate-500 text-xs">Carga, Picking, Autoelevador</p>
+                    </div>
+                    <div class="ml-auto md:hidden text-slate-500">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+
+                <!-- Card 3 -->
+                <a href="empleos.html?cat=admin"
+                    class="group glass p-4 rounded-xl border border-white/5 hover:border-purple-500/30 hover:bg-white/5 transition flex items-center md:flex-col md:items-start gap-4">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400 group-hover:scale-110 transition">
+                        <i class="fas fa-file-invoice text-xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <h3 class="text-white font-bold text-lg group-hover:text-purple-300 transition">Administración
+                        </h3>
+                        <p class="text-slate-500 text-xs">Analistas, Jefes</p>
+                    </div>
+                    <div class="ml-auto md:hidden text-slate-500">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+
+                <!-- Card 4 -->
+                <a href="empleos.html?cat=tecnico"
+                    class="group glass p-4 rounded-xl border border-white/5 hover:border-orange-500/30 hover:bg-white/5 transition flex items-center md:flex-col md:items-start gap-4">
+                    <div
+                        class="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-400 group-hover:scale-110 transition">
+                        <i class="fas fa-cogs text-xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <h3 class="text-white font-bold text-lg group-hover:text-orange-300 transition">Técnicos</h3>
+                        <p class="text-slate-500 text-xs">Mantenimiento, Seguridad</p>
+                    </div>
+                    <div class="ml-auto md:hidden text-slate-500">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
             </div>
         </div>
 
-        <!-- Role Bifurcation -->
-        <div class="grid md:grid-cols-2 gap-6 w-full max-w-4xl">
-
-            <!-- Cards Candidatos -->
-            <div
-                class="group relative bg-slate-800 hover:bg-slate-800/80 border border-slate-700 rounded-3xl p-8 text-left transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/50">
-                <div
-                    class="absolute top-6 right-6 w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center text-slate-300 group-hover:bg-emerald-500 group-hover:text-white transition">
-                    <i class="fas fa-user"></i>
+        <!-- Role Access (Bifurcation - Retained from v1.7 but compact) -->
+        <div class="grid md:grid-cols-2 gap-4 w-full max-w-2xl mx-auto mb-12 opacity-80 hover:opacity-100 transition">
+            <a href="login_candidato.html" class="glass p-4 rounded-xl flex items-center gap-4 hover:bg-white/5 transition group">
+                <div class="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center text-slate-300 group-hover:bg-emerald-500 group-hover:text-white transition">
+                     <i class="fas fa-user"></i>
                 </div>
-                <h3 class="text-2xl font-bold text-white mb-2">Soy Candidato</h3>
-                <p class="text-slate-400 text-sm mb-8 pr-10">Busco mi próximo desafío en logística, transporte o
-                    almacén.</p>
-
-                <div class="flex flex-col gap-3">
-                    <a href="empleos.html"
-                        class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-center transition shadow-lg shadow-emerald-500/20">
-                        Ver Ofertas
-                    </a>
-                    <div class="flex gap-3">
-                        <a href="login_candidato.html"
-                            class="flex-1 py-3 bg-slate-700 hover:bg-slate-600 text-white text-sm font-bold rounded-xl text-center transition">Ingresar</a>
-                        <a href="registro.html"
-                            class="flex-1 py-3 bg-transparent border border-slate-600 hover:border-slate-400 text-slate-300 hover:text-white text-sm font-bold rounded-xl text-center transition">Registrarme</a>
-                    </div>
+                <div class="text-left">
+                     <h4 class="font-bold text-white">Soy Candidato</h4>
+                     <p class="text-xs text-slate-400">Ingresar o Registrarse</p>
                 </div>
+            </a>
+            <a href="login_empresa.html" class="glass p-4 rounded-xl flex items-center gap-4 hover:bg-white/5 transition group">
+                <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-slate-300 group-hover:bg-cyan-500 group-hover:text-white transition">
+                     <i class="fas fa-building"></i>
+                </div>
+                <div class="text-left">
+                     <h4 class="font-bold text-white">Soy Empresa</h4>
+                     <p class="text-xs text-slate-400">Publicar empleos</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Stats Grid (Compact) -->
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-3xl mt-auto border-t border-white/5 pt-12">
+            <div class="p-4 text-center">
+                <p class="text-3xl font-bold text-white mb-1">
+                    <?php echo $stats['anuncios']; ?>
+                </p>
+                <p class="text-xs text-slate-500 uppercase font-bold tracking-wider">Oportunidades Activas</p>
             </div>
-
-            <!-- Cards Empresas -->
-            <div
-                class="group relative bg-slate-900 border border-slate-800 rounded-3xl p-8 text-left transition-all duration-300 hover:-translate-y-1 hover:border-cyan-500/50">
-                <div
-                    class="absolute top-6 right-6 w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-slate-300 group-hover:bg-cyan-500 group-hover:text-white transition">
-                    <i class="fas fa-building"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-white mb-2">Soy Empresa</h3>
-                <p class="text-slate-400 text-sm mb-8 pr-10">Busco talento calificado para potenciar mi operación.</p>
-
-                <div class="flex flex-col gap-3">
-                    <a href="login_empresa.html"
-                        class="w-full py-3 bg-cyan-600 hover:bg-cyan-700 text-white font-bold rounded-xl text-center transition shadow-lg shadow-cyan-500/20">
-                        Ingresar a Empresas
-                    </a>
-                    <a href="registro_empresa.html"
-                        class="w-full py-3 bg-transparent border border-slate-700 hover:border-slate-500 text-slate-400 hover:text-white text-sm font-bold rounded-xl text-center transition">
-                        Crear Cuenta Corporativa
-                    </a>
-                </div>
+            <div class="p-4 text-center">
+                <p class="text-3xl font-bold text-emerald-400 mb-1">
+                    <?php echo $stats['candidatos']; ?>
+                </p>
+                <p class="text-xs text-slate-500 uppercase font-bold tracking-wider">Candidatos Registrados</p>
             </div>
-
+            <div class="p-4 text-center hidden md:block">
+                <p class="text-3xl font-bold text-cyan-400 mb-1">
+                    <?php echo $stats['empresas']; ?>
+                </p>
+                <p class="text-xs text-slate-500 uppercase font-bold tracking-wider">Empresas Confían</p>
+            </div>
         </div>
 
     </main>
 
-    <footer class="p-8 text-center text-slate-600 text-sm md:flex md:justify-between md:container md:mx-auto">
+    <footer
+        class="p-8 text-center text-slate-600 text-sm md:flex md:justify-between md:container md:mx-auto border-t border-white/5">
         <p>&copy; 2026 ArLog Jobs. Todos los derechos reservados.</p>
         <div class="flex gap-4 justify-center mt-4 md:mt-0">
             <a href="#" class="hover:text-slate-400">Términos</a>
