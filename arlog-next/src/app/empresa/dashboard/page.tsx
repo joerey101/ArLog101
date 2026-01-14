@@ -23,7 +23,7 @@ export default async function EmpresaDashboard() {
     const perfil = await prisma.perfilEmpresa.findUnique({ where: { usuario_id: userId } });
 
     const anunciosActivos = await prisma.anuncio.count({
-        where: { usuario_id: userId, estado: EstadoAnuncio.activo }
+        where: { usuario_id: userId, estado: EstadoAnuncio.ACTIVO }
     });
 
     // Obtenemos los IDs de mis anuncios para contar postulaciones

@@ -2,6 +2,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import prisma from "@/lib/prisma";
+import { Rol } from "@prisma/client";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { redirect } from "next/navigation";
@@ -40,7 +41,7 @@ export default async function AdminUsuariosPage() {
                     </TableHeader>
                     <TableBody>
                         {usuarios.map((u) => {
-                            const nombreDisplay = u.rol === 'candidato'
+                            const nombreDisplay = u.rol === Rol.CANDIDATO
                                 ? `${u.perfilCandidato?.nombre || ''} ${u.perfilCandidato?.apellido || ''}`
                                 : u.perfilEmpresa?.razon_social || '-';
 
@@ -50,8 +51,8 @@ export default async function AdminUsuariosPage() {
                                     <TableCell className="text-white">{u.email}</TableCell>
                                     <TableCell>
                                         <Badge className={
-                                            u.rol === 'admin' ? 'bg-red-500/20 text-red-400' :
-                                                u.rol === 'empresa' ? 'bg-cyan-500/20 text-cyan-400' :
+                                            u.rol === Rol.ADMIN ? 'bg-red-500/20 text-red-400' :
+                                                u.rol === Rol.EMPRESA ? 'bg-cyan-500/20 text-cyan-400' :
                                                     'bg-emerald-500/20 text-emerald-400'
                                         }>
                                             {u.rol}

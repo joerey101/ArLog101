@@ -3,15 +3,16 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Search, MapPin, ArrowRight, Truck, Package, Monitor, Wrench } from "lucide-react";
+import { Rol, EstadoAnuncio } from "@prisma/client";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 
 export default async function Home() {
   // Fetch dynamic stats directly from DB (Server Component power!)
   const stats = {
-    anuncios: await prisma.anuncio.count({ where: { estado: 'activo' } }).catch(() => 0),
-    candidatos: await prisma.usuario.count({ where: { rol: 'candidato' } }).catch(() => 0),
-    empresas: await prisma.usuario.count({ where: { rol: 'empresa' } }).catch(() => 0),
+    anuncios: await prisma.anuncio.count({ where: { estado: EstadoAnuncio.ACTIVO } }).catch(() => 0),
+    candidatos: await prisma.usuario.count({ where: { rol: Rol.CANDIDATO } }).catch(() => 0),
+    empresas: await prisma.usuario.count({ where: { rol: Rol.EMPRESA } }).catch(() => 0),
   };
 
   return (

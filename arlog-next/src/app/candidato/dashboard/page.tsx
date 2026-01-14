@@ -17,7 +17,7 @@ export default async function CandidatoDashboard() {
     // Fetch Data en Paralelo
     const [perfil, postulacionesCount] = await Promise.all([
         prisma.perfilCandidato.findUnique({ where: { usuario_id: userId } }),
-        prisma.postulacion.count({ where: { usuario_id: userId } })
+        prisma.postulacion.count({ where: { candidato_id: userId } })
     ]);
 
     const tieneCV = !!perfil?.cv_url;

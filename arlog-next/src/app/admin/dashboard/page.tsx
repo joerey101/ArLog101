@@ -7,6 +7,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Users, Briefcase, FileText, Activity } from "lucide-react";
 import { redirect } from "next/navigation";
 
+import { Rol } from "@prisma/client";
+
+// ... existing imports ...
+
 export default async function AdminDashboard() {
     const session = await getServerSession(authOptions);
 
@@ -21,8 +25,8 @@ export default async function AdminDashboard() {
         totalAnuncios,
         totalPostulaciones
     ] = await Promise.all([
-        prisma.usuario.count({ where: { rol: 'candidato' } }),
-        prisma.usuario.count({ where: { rol: 'empresa' } }),
+        prisma.usuario.count({ where: { rol: Rol.CANDIDATO } }),
+        prisma.usuario.count({ where: { rol: Rol.EMPRESA } }),
         prisma.anuncio.count(),
         prisma.postulacion.count()
     ]);

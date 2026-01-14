@@ -29,7 +29,7 @@ export async function createJobAction(formData: FormData) {
                 modalidad,
                 rango_salarial,
                 tipo_contrato,
-                estado: EstadoAnuncio.activo
+                estado: EstadoAnuncio.ACTIVO
             }
         });
 

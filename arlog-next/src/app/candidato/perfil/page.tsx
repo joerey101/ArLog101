@@ -30,7 +30,7 @@ async function updateProfile(formData: FormData) {
             nombre,
             apellido,
             telefono,
-            ubicacion,
+            ciudad: ubicacion,
             linkedin_url: linkedin,
             cv_url
         },
@@ -39,7 +39,7 @@ async function updateProfile(formData: FormData) {
             nombre,
             apellido,
             telefono,
-            ubicacion,
+            ciudad: ubicacion,
             linkedin_url: linkedin,
             cv_url
         }
@@ -111,7 +111,7 @@ export default async function PerfilPage() {
 
                                 <div className="space-y-2">
                                     <Label htmlFor="ubicacion" className="text-slate-300">Ubicación (Zona de residencia)</Label>
-                                    <Input id="ubicacion" name="ubicacion" defaultValue={perfil?.ubicacion || ''} className="bg-slate-900 border-white/10 text-white" placeholder="Ej: Pilar, Zona Norte" />
+                                    <Input id="ubicacion" name="ubicacion" defaultValue={perfil?.ciudad || ''} className="bg-slate-900 border-white/10 text-white" placeholder="Ej: Pilar, Zona Norte" />
                                 </div>
 
                                 <div className="space-y-2">
