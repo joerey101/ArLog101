@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MapPin, Briefcase, Clock, DollarSign, Calendar, CheckCircle2 } from "lucide-react";
+import { MapPin, Briefcase, Clock, DollarSign, Calendar, CheckCircle2, FileText } from "lucide-react";
 import { Rol, EstadoAnuncio } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
