@@ -16,7 +16,8 @@ export function CreateJobForm({ userId }: { userId: string }) {
     const [error, setError] = useState('');
 
     // Estados para selectores
-    const [tipo, setTipo] = useState('full_time');
+    const [tipo, setTipo] = useState('Full Time');
+    const [modalidad, setModalidad] = useState('PRESENCIAL');
 
     async function onSubmit(formData: FormData) {
         setLoading(true);
@@ -24,6 +25,7 @@ export function CreateJobForm({ userId }: { userId: string }) {
 
         // Añadir valores de select manually
         formData.set('tipo_contrato', tipo);
+        formData.set('modalidad', modalidad);
 
         try {
             const result = await createJobAction(formData);
@@ -60,18 +62,39 @@ export function CreateJobForm({ userId }: { userId: string }) {
                 </div>
             </div>
 
+            <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label className="text-slate-300">Modalidad</Label>
+                    <Select value={modalidad} onValueChange={setModalidad}>
+                        <SelectTrigger className="bg-slate-900 border-white/10 text-white">
+                            <SelectValue placeholder="Seleccionar" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="PRESENCIAL">Presencial</SelectItem>
+                            <SelectItem value="HIBRIDO">Híbrido</SelectItem>
+                            <SelectItem value="REMOTO">100% Remoto</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="space-y-2">
+                    <Label className="text-slate-300">Tipo de Jornada</Label>
+                    <Select value={tipo} onValueChange={setTipo}>
+                        <SelectTrigger className="bg-slate-900 border-white/10 text-white">
+                            <SelectValue placeholder="Seleccionar" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="Full Time">Full Time</SelectItem>
+                            <SelectItem value="Part Time">Part Time</SelectItem>
+                            <SelectItem value="Eventual">Eventual / Temporada</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
+
             <div className="space-y-2">
-                <Label className="text-slate-300">Tipo de Jornada</Label>
-                <Select value={tipo} onValueChange={setTipo}>
-                    <SelectTrigger className="bg-slate-900 border-white/10 text-white">
-                        <SelectValue placeholder="Seleccionar" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="full_time">Full Time</SelectItem>
-                        <SelectItem value="part_time">Part Time</SelectItem>
-                        <SelectItem value="eventual">Eventual / Temporada</SelectItem>
-                    </SelectContent>
-                </Select>
+                <Label className="text-slate-300">Rango Salarial (Opcional)</Label>
+                <Input name="rango_salarial" placeholder="Ej: $800.000 - $950.000 Bruto" className="bg-slate-900 border-white/10 text-white" />
+                <p className="text-xs text-slate-500">Visible para candidatos. Aumenta la conversión.</p>
             </div>
 
             <div className="space-y-2">

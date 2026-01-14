@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../../api/auth/[...nextauth]/route";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { EstadoAnuncio } from "@prisma/client";
+import { EstadoAnuncio, Modalidad } from "@prisma/client";
 
 export async function createJobAction(formData: FormData) {
     const session = await getServerSession(authOptions);
@@ -16,6 +16,8 @@ export async function createJobAction(formData: FormData) {
         const ubicacion = formData.get('ubicacion') as string;
         const departamento = formData.get('departamento') as string;
         const tipo_contrato = formData.get('tipo_contrato') as string;
+        const modalidad = formData.get('modalidad') as Modalidad;
+        const rango_salarial = formData.get('rango_salarial') as string;
 
         await prisma.anuncio.create({
             data: {
@@ -24,6 +26,8 @@ export async function createJobAction(formData: FormData) {
                 descripcion,
                 departamento,
                 ubicacion,
+                modalidad,
+                rango_salarial,
                 tipo_contrato,
                 estado: EstadoAnuncio.activo
             }

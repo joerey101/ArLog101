@@ -3,69 +3,68 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
-// Enums
+// -----------------------------------------------------------------------------
+// ENUMS
+// -----------------------------------------------------------------------------
+
 enum Rol {
-  admin
-  empresa
-  candidato
+  ADMIN     @map("admin")
+  EMPRESA   @map("empresa")
+  CANDIDATO @map("candidato")
 }
-
-
 
 enum Modalidad {
-  remoto
-  hibrido
-  presencial
+  PRESENCIAL @map("presencial")
+  REMOTO     @map("remoto")
+  HIBRIDO    @map("hibrido")
 }
 
 enum EstadoAnuncio {
-  activo
-  pausado
-  cerrado
-  borrador
+  ACTIVO    @map("activo")
+  PAUSADO   @map("pausado")
+  CERRADO   @map("cerrado")
+  BORRADOR  @map("borrador")
 }
 
 enum EstadoPostulacion {
-  nuevo
-  visto
-  entrevista
-  finalista
-  descartado
-  contratado
+  NUEVO       @map("nuevo")
+  VISTO       @map("visto")
+  ENTREVISTA  @map("entrevista")
+  FINALISTA   @map("finalista")
+  DESCARTADO  @map("descartado")
+  CONTRATADO  @map("contratado")
 }
 
 enum TipoEtiqueta {
-  hard_skill
-  soft_skill
-  idioma
-  certificacion
-  documentacion
-}
-
-enum EstadoEtiqueta {
-  aprobada
-  sugerida
+  HARD_SKILL      @map("hard_skill")
+  SOFT_SKILL      @map("soft_skill")
+  IDIOMA          @map("idioma")
+  CERTIFICACION   @map("certificacion")
+  DOCUMENTACION   @map("documentacion")
 }
 
 enum NivelEtiqueta {
-  basico
-  intermedio
-  avanzado
-  experto
+  BASICO      @map("basico")
+  INTERMEDIO  @map("intermedio")
+  AVANZADO    @map("avanzado")
+  EXPERTO     @map("experto")
 }
 
-// Modelos
+// -----------------------------------------------------------------------------
+// MODELOS PRINCIPALES
+// -----------------------------------------------------------------------------
 
 model Usuario {
-  id              Int       @id @default(autoincrement())
-  email           String    @unique
-  password_hash   String
-  rol             Rol
-  fecha_registro  DateTime  @default(now())
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  password_hash String
+  rol           Rol       @default(CANDIDATO)
+  fecha_registro DateTime @default(now())
 
   // Relaciones
   perfilCandidato PerfilCandidato?
@@ -76,119 +75,136 @@ model Usuario {
   @@map("usuarios")
 }
 
+model PerfilEmpresa {
+  id            Int     @id @default(autoincrement())
+  usuario_id    Int     @unique
+  razon_social  String?
+  rubro         String?
+  descripcion   String? @db.Text
+  sitio_web     String?
+  logo_url      String?
+  cuit          String? // Identificación Fiscal
+  
+  // Ubicación
+  ubicacion     String?
+
+  usuario       Usuario @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  
+  // Relación inversa para facilitar querys desde Anuncio
+  anuncios      Anuncio[] 
+
+  @@map("perfiles_empresa")
+}
+
 model PerfilCandidato {
-  id              Int      @id @default(autoincrement())
-  usuario_id      Int      @unique
+  id              Int     @id @default(autoincrement())
+  usuario_id      Int     @unique
   nombre          String?
   apellido        String?
   telefono        String?
-  ubicacion       String?  // Nuevo
-  zona            String?  // Nuevo
-  localidad       String?  // Nuevo
+  titulo_cargo    String? // Ej: Desarrollador Fullstack
+  sobre_mi        String? @db.Text
   cv_url          String?
-  linkedin_url    String?  // Usamos este como canónico
-  licencias       String?  // Nuevo (JSON o texto)
+  linkedin_url    String?
+  portfolio_url   String?
   
-  // Campos legacy que tengo que mantener para que compile por ahora o eliminar si no se usan
-  // Eliminados: direccion, ciudad, provincia, codigo_postal, fecha_nacimiento, genero, resumen, titulo
+  // Ubicación
+  pais            String? @default("Argentina")
+  provincia       String?
+  ciudad          String?
 
-  usuario         Usuario  @relation(fields: [usuario_id], references: [id])
+  usuario         Usuario @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
   etiquetas       PerfilEtiqueta[]
 
-  @@map("perfiles_candidatos")
+  @@map("perfiles_candidato")
 }
 
-model PerfilEmpresa {
-  id              Int      @id @default(autoincrement())
-  usuario_id      Int      @unique
-  razon_social    String?
-  cuit            String?
-  rubro           String?  @map("industria") // Mapeado a industria
-  sitio_web       String?
-  logo_url        String?
-  descripcion     String?  @db.Text
+model Anuncio {
+  id                Int           @id @default(autoincrement())
+  usuario_id        Int
   
-  // Eliminados: telefono, direccion, ciudad
+  // Datos del Puesto
+  titulo            String
+  descripcion       String        @db.Text
+  departamento      String?       // Área
+  
+  // Detalles
+  modalidad         Modalidad     @default(PRESENCIAL)
+  tipo_contrato     String?       // Full-time, Part-time, etc.
+  rango_salarial    String?       // Texto libre o JSON rango
+  ubicacion         String?       // Lugar físico del trabajo
+  
+  // Estado y Fechas
+  estado            EstadoAnuncio @default(ACTIVO)
+  fecha_publicacion DateTime      @default(now())
+  fecha_actualizacion DateTime    @updatedAt
 
-  usuario         Usuario  @relation(fields: [usuario_id], references: [id])
-  anuncios        Anuncio[]
+  // Relaciones
+  usuario           Usuario       @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  // Relacion explícita opcional con empresa para facilitar includes
+  empresa_perfil    PerfilEmpresa? @relation(fields: [usuario_id], references: [usuario_id], map: "anuncios_empresa_fk")
 
-  @@map("perfiles_empresas")
+  postulaciones     Postulacion[]
+  etiquetas         AnuncioEtiqueta[]
+
+  @@map("anuncios")
 }
+
+model Postulacion {
+  id                Int               @id @default(autoincrement())
+  anuncio_id        Int
+  candidato_id      Int
+  
+  fecha_postulacion DateTime          @default(now())
+  estado            EstadoPostulacion @default(NUEVO)
+  
+  // Datos snapshot del momento de postulación
+  cv_snapshot_url   String?
+  mensaje_candidato String?           @db.Text
+  match_score       Int?              @default(0) // IA Score
+
+  anuncio           Anuncio           @relation(fields: [anuncio_id], references: [id], onDelete: Cascade)
+  candidato         Usuario           @relation(fields: [candidato_id], references: [id], onDelete: Cascade)
+
+  @@unique([anuncio_id, candidato_id]) // Evitar doble postulación
+  @@map("postulaciones")
+}
+
+// -----------------------------------------------------------------------------
+// SISTEMA DE ETIQUETAS (Skills)
+// -----------------------------------------------------------------------------
 
 model Etiqueta {
-  id              Int      @id @default(autoincrement())
-  nombre          String   @unique
+  id              Int             @id @default(autoincrement())
+  nombre          String          @unique
   categoria       TipoEtiqueta?
 
-  match_perfiles  PerfilEtiqueta[]
-  match_anuncios  AnuncioEtiqueta[]
+  perfiles        PerfilEtiqueta[]
+  anuncios        AnuncioEtiqueta[]
 
   @@map("etiquetas")
 }
 
-model Anuncio {
-  id                Int      @id @default(autoincrement())
-  usuario_id        Int
-  titulo            String
-  descripcion       String?  @db.Text
-  departamento      String?  
-  ubicacion         String?
-  tipo_contrato     String?
-  fecha_publicacion DateTime @default(now()) @map("fecha_creacion")
-  estado            EstadoAnuncio? @default(activo)
-  requisitos_json   Json?    
+model PerfilEtiqueta {
+  perfil_id       Int
+  etiqueta_id     Int
+  nivel           NivelEtiqueta   @default(INTERMEDIO)
 
-  usuario         Usuario       @relation(fields: [usuario_id], references: [id])
-  empresa_perfil  PerfilEmpresa? @relation(fields: [usuario_id], references: [usuario_id], map: "anuncios_perfil_empresa_fk")
-  postulaciones   Postulacion[]
-  etiquetas       AnuncioEtiqueta[]
+  perfil          PerfilCandidato @relation(fields: [perfil_id], references: [id], onDelete: Cascade)
+  etiqueta        Etiqueta        @relation(fields: [etiqueta_id], references: [id], onDelete: Cascade)
 
-  @@map("anuncios")
+  @@id([perfil_id, etiqueta_id])
+  @@map("perfil_etiquetas")
 }
 
 model AnuncioEtiqueta {
   anuncio_id      Int
   etiqueta_id     Int
-  estado          EstadoEtiqueta @default(sugerida)
+  obligatorio     Boolean         @default(false)
 
-  anuncio         Anuncio  @relation(fields: [anuncio_id], references: [id])
-  etiqueta        Etiqueta        @relation(fields: [etiqueta_id], references: [id])
+  anuncio         Anuncio         @relation(fields: [anuncio_id], references: [id], onDelete: Cascade)
+  etiqueta        Etiqueta        @relation(fields: [etiqueta_id], references: [id], onDelete: Cascade)
 
   @@id([anuncio_id, etiqueta_id])
   @@map("anuncio_etiquetas")
-}
-
-model PerfilEtiqueta {
-  candidato_id    Int
-  etiqueta_id     Int
-  nivel           NivelEtiqueta? @default(basico)
-
-  perfil          PerfilCandidato @relation(fields: [candidato_id], references: [id])
-  etiqueta        Etiqueta        @relation(fields: [etiqueta_id], references: [id])
-
-  @@id([candidato_id, etiqueta_id])
-  @@map("perfil_etiquetas")
-}
-
-model Postulacion {
-  id              Int      @id @default(autoincrement())
-  anuncio_id      Int
-  candidato_id    Int
-  
-  // Campos legacy reales
-  nombre_candidato String?
-  email_candidato  String?
-  ruta_archivo_pdf String?
-  datos_extra      Json?
-  analisis_ia      Json?
-  usuario_id       Int?     
-
-  fecha_postulacion DateTime @default(now())
-  estado          EstadoPostulacion @default(nuevo)
-
-  anuncio         Anuncio  @relation(fields: [anuncio_id], references: [id])
-  candidato       Usuario  @relation(fields: [candidato_id], references: [id])
-
-  @@map("postulaciones")
 }
