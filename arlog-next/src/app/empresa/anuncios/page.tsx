@@ -76,8 +76,10 @@ export default async function MisAnunciosPage() {
                                         {anuncio.estado?.toUpperCase() || 'S/D'}
                                     </Badge>
                                 </div>
-                                <div className="col-span-3 md:col-span-2 text-center flex items-center justify-center gap-1 text-white font-bold">
-                                    <Users size={14} className="text-purple-400" /> {anuncio._count.postulaciones}
+                                <div className="col-span-3 md:col-span-2 text-center flex items-center justify-center gap-1 font-bold">
+                                    <Link href={`/empresa/anuncios/${anuncio.id}/postulantes`} className="flex items-center gap-2 px-3 py-1 rounded-md hover:bg-white/10 text-white transition-colors">
+                                        <Users size={14} className="text-purple-400" /> {anuncio._count.postulaciones}
+                                    </Link>
                                 </div>
                                 <div className="col-span-3 hidden md:block text-right text-sm text-slate-500">
                                     {new Date(anuncio.fecha_publicacion).toLocaleDateString()}
