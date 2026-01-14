@@ -11,12 +11,15 @@ export default async function DashboardRedirect() {
 
     const rol = session.user.rol;
 
-    if (rol === 'candidato') {
+    // Normalizar a mayúsculas para asegurar coincidencia con Enum de Prisma
+    const rolUpper = rol?.toUpperCase();
+
+    if (rolUpper === 'CANDIDATO') {
         redirect('/candidato/dashboard');
-    } else if (rol === 'empresa') {
+    } else if (rolUpper === 'EMPRESA') {
         redirect('/empresa/dashboard');
-    } else if (rol === 'admin') {
-        redirect('/admin/dashboard'); // Asumiendo que quisieras crear este también
+    } else if (rolUpper === 'ADMIN') {
+        redirect('/admin/dashboard');
     } else {
         // Fallback por seguridad
         return (
