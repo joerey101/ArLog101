@@ -49,7 +49,7 @@ export default function CandidatoLayout({
 
                 <div className="p-4 border-t border-white/10">
                     {/* Logout logic generally handled differently, for now just a link to api auth signout */}
-                    <Link href="/api/auth/signout">
+                    <Link href="/api/auth/signout?callbackUrl=/">
                         <Button variant="ghost" className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-500/10">
                             <LogOut className="mr-2 h-4 w-4" />
                             Cerrar Sesión
