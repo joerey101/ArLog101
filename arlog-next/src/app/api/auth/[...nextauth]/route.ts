@@ -39,13 +39,13 @@ export const authOptions: NextAuthOptions = {
                 }
 
                 // 3. Retornar objeto usuario (lo que se guardará en el token JWT)
-                // Normalizamos el rol para evitar errores de mayúsculas/espacios
-                const sanitizedRole = user.rol ? user.rol.toString().toLowerCase().trim() : 'candidato';
+                // Pasamos el rol tal cual (Enum) para comparaciones estrictas
+                const userRole = user.rol ? user.rol.toString() : 'CANDIDATO';
 
                 return {
                     id: user.id.toString(),
                     email: user.email,
-                    rol: sanitizedRole,
+                    rol: userRole,
                     name: user.email.split("@")[0] // Fallback name
                 };
             }
