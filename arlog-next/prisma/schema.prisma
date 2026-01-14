@@ -14,11 +14,7 @@ enum Rol {
   candidato
 }
 
-enum EstadoUsuario {
-  activo
-  futa_validacion
-  suspendido
-}
+
 
 enum Modalidad {
   remoto
@@ -69,7 +65,6 @@ model Usuario {
   email           String    @unique
   password_hash   String
   rol             Rol
-  estado          EstadoUsuario @default(activo)
   fecha_registro  DateTime  @default(now())
 
   // Relaciones

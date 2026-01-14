@@ -34,7 +34,7 @@ export default async function AdminUsuariosPage() {
                             <TableHead className="text-slate-400">Email</TableHead>
                             <TableHead className="text-slate-400">Rol</TableHead>
                             <TableHead className="text-slate-400">Nombre / Razón Social</TableHead>
-                            <TableHead className="text-slate-400">Estado</TableHead>
+
                             <TableHead className="text-slate-400 text-right">Registro</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -58,13 +58,7 @@ export default async function AdminUsuariosPage() {
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-slate-300">{nombreDisplay.trim() || 'Sin completar perfil'}</TableCell>
-                                    <TableCell>
-                                        {u.estado === 'activo' ? (
-                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-500/10 text-green-500">Activo</span>
-                                        ) : (
-                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-500/10 text-red-500">{u.estado}</span>
-                                        )}
-                                    </TableCell>
+
                                     <TableCell className="text-right text-slate-500 text-xs">
                                         {new Date(u.fecha_registro).toLocaleDateString()}
                                     </TableCell>
