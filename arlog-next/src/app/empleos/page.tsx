@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Briefcase, Clock, Calendar } from "lucide-react";
 import { EstadoAnuncio } from "@prisma/client";
 
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+
 export const dynamic = 'force-dynamic';
 
 export default async function EmpleosPage({
@@ -14,7 +17,11 @@ export default async function EmpleosPage({
 }: {
     searchParams?: { q?: string; loc?: string };
 }) {
+    const session = await getServerSession(authOptions);
     const { q, loc } = searchParams || {};
+
+    // Determine back link destination
+    const backLink = session ? '/dashboard' : '/';
 
     const anuncios = await prisma.anuncio.findMany({
         where: {
@@ -40,7 +47,7 @@ export default async function EmpleosPage({
             {/* Header */}
             <header className="bg-slate-900 border-b border-white/5 py-8">
                 <div className="container mx-auto px-6">
-                    <Link href="/" className="mb-4 inline-block text-sm text-emerald-400 hover:text-emerald-300 font-medium">
+                    <Link href={backLink} className="mb-4 inline-block text-sm text-emerald-400 hover:text-emerald-300 font-medium">
                         ← Volver al Inicio
                     </Link>
                     <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Bolsa de Trabajo</h1>
