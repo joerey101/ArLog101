@@ -140,7 +140,7 @@ model Anuncio {
   requisitos_json   Json?    
 
   usuario         Usuario       @relation(fields: [usuario_id], references: [id])
-  empresa_perfil  PerfilEmpresa? @relation(fields: [usuario_id], references: [usuario_id])
+  empresa_perfil  PerfilEmpresa? @relation(fields: [usuario_id], references: [usuario_id], map: "anuncios_perfil_empresa_fk")
   postulaciones   Postulacion[]
   etiquetas       AnuncioEtiqueta[]
 
