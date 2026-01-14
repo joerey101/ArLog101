@@ -28,7 +28,7 @@ export default async function Home() {
             <Link href="/login">
               <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/5">Soy Empresa</Button>
             </Link>
-            <Link href="/registro">
+            <Link href="/login">
               <Button className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-full">
                 Ingresar
               </Button>
@@ -75,7 +75,7 @@ export default async function Home() {
               className="h-14 pl-12 bg-transparent border-transparent focus-visible:ring-0 text-white placeholder:text-slate-500 text-base"
             />
           </div>
-          <Link href="/login" className="w-full md:w-auto">
+          <Link href="/empleos" className="w-full md:w-auto">
             <Button size="lg" className="w-full h-14 px-8 rounded-xl md:rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-bold text-base shadow-lg shadow-emerald-500/20">
               Buscar Empleo
             </Button>
@@ -93,7 +93,7 @@ export default async function Home() {
             { id: 'admin', name: 'Admin', sub: 'Analistas, RRHH', icon: Monitor, color: 'text-purple-400', bg: 'bg-purple-500/10' },
             { id: 'tecnico', name: 'Técnico', sub: 'Mecánicos, Mant.', icon: Wrench, color: 'text-orange-400', bg: 'bg-orange-500/10' },
           ].map((cat) => (
-            <Link key={cat.id} href="/login" className="group relative">
+            <Link key={cat.id} href={`/empleos?q=${cat.name}`} className="group relative">
               <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/0 via-emerald-500/0 to-emerald-500/0 group-hover:via-emerald-500/10 opacity-0 group-hover:opacity-100 transition duration-500 rounded-xl" />
               <Card className="bg-white/5 border-white/10 hover:border-emerald-500/30 transition-all duration-300">
                 <CardContent className="p-5 flex items-center gap-4">
