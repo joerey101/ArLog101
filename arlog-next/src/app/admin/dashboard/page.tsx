@@ -2,83 +2,83 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import prisma from "@/lib/prisma";
-import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Users, Briefcase, FileText, Activity } from "lucide-react";
 import { redirect } from "next/navigation";
-
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Users, Briefcase, Building2, UserCheck } from "lucide-react";
 import { Rol } from "@prisma/client";
 
-// ... existing imports ...
+export const dynamic = 'force-dynamic';
 
-export default async function AdminDashboard() {
+export default async function AdminDashboardPage() {
     const session = await getServerSession(authOptions);
 
-    if (!session || session.user.rol !== 'admin') {
-        redirect('/login'); // Protección extra, aunque el middleware o page redirect ya lo haría
+    // Strict Admin Check
+    if (!session || session.user.rol !== 'ADMIN') {
+        redirect('/');
     }
 
-    // Métricas reales
-    const [
-        totalCandidatos,
-        totalEmpresas,
-        totalAnuncios,
-        totalPostulaciones
-    ] = await Promise.all([
+    // Parallel Data Fetching for Stats
+    const [totalUsuarios, totalCandidatos, totalEmpresas, totalAnuncios] = await Promise.all([
+        prisma.usuario.count(),
         prisma.usuario.count({ where: { rol: Rol.CANDIDATO } }),
         prisma.usuario.count({ where: { rol: Rol.EMPRESA } }),
         prisma.anuncio.count(),
-        prisma.postulacion.count()
     ]);
 
     return (
         <div className="space-y-8">
             <div>
-                <h1 className="text-3xl font-bold text-white mb-2">Panel de Supervisión</h1>
-                <p className="text-slate-400">Estado del sistema en tiempo real.</p>
+                <h1 className="text-3xl font-bold text-white mb-2">Panel de Administración</h1>
+                <p className="text-slate-400">Resumen general del estado de la plataforma.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <MetricCard title="Candidatos" value={totalCandidatos} icon={<Users className="text-emerald-500" />} />
-                <MetricCard title="Empresas" value={totalEmpresas} icon={<Briefcase className="text-cyan-500" />} />
-                <MetricCard title="Anuncios Totales" value={totalAnuncios} icon={<Activity className="text-yellow-500" />} />
-                <MetricCard title="Postulaciones" value={totalPostulaciones} icon={<FileText className="text-purple-500" />} />
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-                <Card className="bg-slate-900 border-white/5">
-                    <CardHeader>
-                        <CardTitle className="text-white">Control de Calidad</CardTitle>
-                        <CardDescription>Accesos directos a moderación</CardDescription>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <Card className="bg-slate-900/50 border-white/10 hover:border-violet-500/50 transition-all">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium text-slate-400">Total Usuarios</CardTitle>
+                        <Users className="h-4 w-4 text-violet-400" />
                     </CardHeader>
-                    <CardContent className="grid gap-2">
-                        <Link href="/admin/usuarios" className="p-3 bg-white/5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 flex justify-between">
-                            <span>Ver todos los usuarios</span>
-                            <Users size={16} />
-                        </Link>
-                        <Link href="/admin/anuncios" className="p-3 bg-white/5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 flex justify-between">
-                            <span>Moderación de Anuncios</span>
-                            <ShieldAlertIcon />
-                        </Link>
+                    <CardContent>
+                        <div className="text-2xl font-bold text-white">{totalUsuarios}</div>
+                        <p className="text-xs text-slate-500">Registrados en el sistema</p>
                     </CardContent>
                 </Card>
+                <Card className="bg-slate-900/50 border-white/10 hover:border-emerald-500/50 transition-all">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium text-slate-400">Candidatos</CardTitle>
+                        <UserCheck className="h-4 w-4 text-emerald-400" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold text-white">{totalCandidatos}</div>
+                        <p className="text-xs text-slate-500">Buscan empleo</p>
+                    </CardContent>
+                </Card>
+                <Card className="bg-slate-900/50 border-white/10 hover:border-cyan-500/50 transition-all">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium text-slate-400">Empresas</CardTitle>
+                        <Building2 className="h-4 w-4 text-cyan-400" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold text-white">{totalEmpresas}</div>
+                        <p className="text-xs text-slate-500">Publican ofertas</p>
+                    </CardContent>
+                </Card>
+                <Card className="bg-slate-900/50 border-white/10 hover:border-yellow-500/50 transition-all">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium text-slate-400">Anuncios</CardTitle>
+                        <Briefcase className="h-4 w-4 text-yellow-400" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold text-white">{totalAnuncios}</div>
+                        <p className="text-xs text-slate-500">Ofertas totales</p>
+                    </CardContent>
+                </Card>
+            </div>
+
+            {/* TODO: Add Charts or Recent Activity Table here */}
+            <div className="bg-slate-900/30 border border-white/5 rounded-xl p-8 text-center">
+                <p className="text-slate-500 italic">Más métricas y gráficos próximamente en v2.1</p>
             </div>
         </div>
     );
 }
-
-function MetricCard({ title, value, icon }: { title: string, value: number, icon: React.ReactNode }) {
-    return (
-        <Card className="bg-slate-900 border-white/5">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-slate-400 uppercase tracking-wider">{title}</CardTitle>
-                {icon}
-            </CardHeader>
-            <CardContent>
-                <div className="text-3xl font-bold text-white">{value}</div>
-            </CardContent>
-        </Card>
-    )
-}
-
-function ShieldAlertIcon() { return <Activity size={16} /> } // Placeholder

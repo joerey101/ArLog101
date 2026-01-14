@@ -2,73 +2,84 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import prisma from "@/lib/prisma";
-import { Rol } from "@prisma/client";
-import { Badge } from "@/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { redirect } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { User } from "lucide-react";
+
+export const dynamic = 'force-dynamic';
 
 export default async function AdminUsuariosPage() {
     const session = await getServerSession(authOptions);
-    if (!session || session.user.rol !== 'admin') redirect('/login');
+
+    if (!session || session.user.rol !== 'ADMIN') {
+        redirect('/');
+    }
 
     const usuarios = await prisma.usuario.findMany({
         take: 50,
         orderBy: { fecha_registro: 'desc' },
         include: {
             perfilCandidato: { select: { nombre: true, apellido: true } },
-            perfilEmpresa: { select: { razon_social: true } }
+            empresa_perfil: { select: { razon_social: true } }
         }
     });
 
     return (
         <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold text-white">Directorio Global de Usuarios</h1>
-                <Badge variant="outline" className="text-slate-400">Mostrando últimos 50</Badge>
+            <div>
+                <h1 className="text-3xl font-bold text-white mb-2">Gestión de Usuarios</h1>
+                <p className="text-slate-400">Últimos 50 usuarios registrados.</p>
             </div>
 
-            <div className="rounded-md border border-white/10 bg-slate-900/50">
-                <Table>
-                    <TableHeader>
-                        <TableRow className="border-white/10 hover:bg-white/5">
-                            <TableHead className="text-slate-400">ID</TableHead>
-                            <TableHead className="text-slate-400">Email</TableHead>
-                            <TableHead className="text-slate-400">Rol</TableHead>
-                            <TableHead className="text-slate-400">Nombre / Razón Social</TableHead>
-
-                            <TableHead className="text-slate-400 text-right">Registro</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {usuarios.map((u) => {
-                            const nombreDisplay = u.rol === Rol.CANDIDATO
-                                ? `${u.perfilCandidato?.nombre || ''} ${u.perfilCandidato?.apellido || ''}`
-                                : u.perfilEmpresa?.razon_social || '-';
-
-                            return (
-                                <TableRow key={u.id} className="border-white/5 hover:bg-white/5 data-[state=selected]:bg-muted">
-                                    <TableCell className="font-medium text-slate-500">#{u.id}</TableCell>
-                                    <TableCell className="text-white">{u.email}</TableCell>
-                                    <TableCell>
-                                        <Badge className={
-                                            u.rol === Rol.ADMIN ? 'bg-red-500/20 text-red-400' :
-                                                u.rol === Rol.EMPRESA ? 'bg-cyan-500/20 text-cyan-400' :
-                                                    'bg-emerald-500/20 text-emerald-400'
-                                        }>
-                                            {u.rol}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell className="text-slate-300">{nombreDisplay.trim() || 'Sin completar perfil'}</TableCell>
-
-                                    <TableCell className="text-right text-slate-500 text-xs">
-                                        {new Date(u.fecha_registro).toLocaleDateString()}
-                                    </TableCell>
-                                </TableRow>
-                            );
-                        })}
-                    </TableBody>
-                </Table>
-            </div>
+            <Card className="bg-slate-900 border-white/10 overflow-hidden">
+                <CardHeader>
+                    <CardTitle className="text-white flex items-center gap-2">
+                        <User className="text-violet-400" /> Listado General
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-sm text-left text-slate-400">
+                            <thead className="text-xs text-slate-300 uppercase bg-slate-950/50 border-b border-white/10">
+                                <tr>
+                                    <th className="px-6 py-4">ID</th>
+                                    <th className="px-6 py-4">Email / Usuario</th>
+                                    <th className="px-6 py-4">Rol</th>
+                                    <th className="px-6 py-4">Nombre / Razón Social</th>
+                                    <th className="px-6 py-4">Fecha Registro</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-white/5">
+                                {usuarios.map((user) => (
+                                    <tr key={user.id} className="hover:bg-white/5 transition-colors">
+                                        <td className="px-6 py-4 font-mono text-slate-500">#{user.id}</td>
+                                        <td className="px-6 py-4 text-white font-medium">{user.email}</td>
+                                        <td className="px-6 py-4">
+                                            <Badge variant="outline" className={`
+                                                ${user.rol === 'ADMIN' ? 'border-violet-500/50 text-violet-400 bg-violet-500/10' : ''}
+                                                ${user.rol === 'EMPRESA' ? 'border-cyan-500/50 text-cyan-400 bg-cyan-500/10' : ''}
+                                                ${user.rol === 'CANDIDATO' ? 'border-emerald-500/50 text-emerald-400 bg-emerald-500/10' : ''}
+                                            `}>
+                                                {user.rol}
+                                            </Badge>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            {user.perfilCandidato
+                                                ? `${user.perfilCandidato.nombre} ${user.perfilCandidato.apellido}`
+                                                : user.empresa_perfil?.razon_social || '-'
+                                            }
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            {new Date(user.fecha_registro).toLocaleDateString()}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     );
 }
