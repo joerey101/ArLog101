@@ -132,15 +132,13 @@ model Anuncio {
   usuario_id        Int
   titulo            String
   descripcion       String   @db.Text
-  departamento      String?  // Nuevo
+  departamento      String?  
   ubicacion         String?
   tipo_contrato     String?
-  fecha_publicacion DateTime @default(now()) @map("fecha_creacion") // Mapeado
+  fecha_publicacion DateTime @default(now()) @map("fecha_creacion")
   estado            EstadoAnuncio @default(activo)
-  requisitos_json   String?  // Nuevo (posiblemente JSON string)
+  requisitos_json   Json?    
 
-  // Eliminados: modalidad, salario_min, salario_max
-  
   usuario         Usuario       @relation(fields: [usuario_id], references: [id])
   empresa_perfil  PerfilEmpresa? @relation(fields: [usuario_id], references: [usuario_id])
   postulaciones   Postulacion[]
@@ -174,14 +172,23 @@ model PerfilEtiqueta {
 }
 
 model Postulacion {
-  estado            EstadoPostulacion @default(nuevo)
-  fecha_postulacion DateTime  @default(now())
-  mensaje_candidato String?   @db.Text
-  cv_snapshot_url   String?   @db.VarChar(255)
-  match_score       Int?      @default(0)
+  id              Int      @id @default(autoincrement())
+  anuncio_id      Int
+  candidato_id    Int
+  
+  // Campos legacy reales
+  nombre_candidato String?
+  email_candidato  String?
+  ruta_archivo_pdf String?
+  datos_extra      Json?
+  analisis_ia      Json?
+  usuario_id       Int?     
 
-  anuncio Anuncio @relation(fields: [anuncio_id], references: [id], onDelete: Cascade)
-  usuario Usuario @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  fecha_postulacion DateTime @default(now())
+  estado          EstadoPostulacion @default(nuevo)
+
+  anuncio         Anuncio  @relation(fields: [anuncio_id], references: [id])
+  candidato       Usuario  @relation(fields: [candidato_id], references: [id])
 
   @@map("postulaciones")
 }

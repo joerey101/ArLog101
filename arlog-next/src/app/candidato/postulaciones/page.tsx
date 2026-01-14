@@ -27,18 +27,12 @@ export default async function MisPostulacionesPage() {
     if (!session) redirect('/login');
 
     const postulaciones = await prisma.postulacion.findMany({
-        where: { usuario_id: parseInt(session.user.id) },
+        where: { candidato_id: parseInt(session.user.id) },
         include: {
             anuncio: {
                 include: {
-                    // Si tuviéramos relacion Anuncio -> Empresa la traeríamos, 
-                    // pero en v1.9 el link es Anuncio -> Usuario (que es empresa).
-                    // Traemos el usuario publicador para sacar el nombre de empresa.
-                    usuario: {
-                        include: {
-                            perfilEmpresa: true
-                        }
-                    }
+                    empresa_perfil: true, // Relación directa ahora disponible
+                    usuario: true // Fallback por si acaso
                 }
             }
         },
@@ -82,7 +76,7 @@ export default async function MisPostulacionesPage() {
                                         <div className="flex flex-wrap gap-4 text-sm text-slate-400">
                                             <span className="flex items-center gap-1">
                                                 <Building size={14} className="text-cyan-400" />
-                                                {p.anuncio.usuario.perfilEmpresa?.razon_social || 'Empresa Confidencial'}
+                                                {p.anuncio.empresa_perfil?.razon_social || 'Empresa Confidencial'}
                                             </span>
                                             {p.anuncio.ubicacion && (
                                                 <span className="flex items-center gap-1">
