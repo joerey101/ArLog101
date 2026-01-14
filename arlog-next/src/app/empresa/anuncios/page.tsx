@@ -73,7 +73,7 @@ export default async function MisAnunciosPage() {
                                             anuncio.estado === EstadoAnuncio.pausado ? 'border-yellow-500/50 text-yellow-500 bg-yellow-500/10' :
                                                 'border-slate-500 text-slate-500'
                                     }>
-                                        {anuncio.estado.toUpperCase()}
+                                        {anuncio.estado?.toUpperCase() || 'S/D'}
                                     </Badge>
                                 </div>
                                 <div className="col-span-3 md:col-span-2 text-center flex items-center justify-center gap-1 text-white font-bold">
