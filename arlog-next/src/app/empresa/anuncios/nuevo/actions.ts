@@ -14,20 +14,16 @@ export async function createJobAction(formData: FormData) {
         const descripcion = formData.get('descripcion') as string;
         const ubicacion = formData.get('ubicacion') as string;
         const departamento = formData.get('departamento') as string;
-        const modalidad = formData.get('modalidad') as any; // Enum validation simplified
         const tipo_contrato = formData.get('tipo_contrato') as string;
-        const rango_salarial = formData.get('rango_salarial') as string;
 
         await prisma.anuncio.create({
             data: {
                 usuario_id: parseInt(session.user.id),
                 titulo,
                 descripcion,
-                ubicacion,
                 departamento,
-                modalidad, // 'presencial' | 'remoto' | 'hibrido' matches Enum
+                ubicacion,
                 tipo_contrato,
-                rango_salarial,
                 estado: 'activo'
             }
         });

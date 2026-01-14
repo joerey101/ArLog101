@@ -28,7 +28,7 @@ export default async function MisAnunciosPage() {
                 select: { postulaciones: true }
             }
         },
-        orderBy: { fecha_creacion: 'desc' }
+        orderBy: { fecha_publicacion: 'desc' }
     });
 
     return (
@@ -64,7 +64,7 @@ export default async function MisAnunciosPage() {
                             <div key={anuncio.id} className="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/[0.02] transition">
                                 <div className="col-span-6 md:col-span-5">
                                     <h3 className="text-white font-bold truncate">{anuncio.titulo}</h3>
-                                    <p className="text-xs text-slate-500 truncate">{anuncio.ubicacion} • {anuncio.modalidad}</p>
+                                    <p className="text-xs text-slate-500 truncate">{anuncio.ubicacion}</p>
                                 </div>
                                 <div className="col-span-3 md:col-span-2 text-center">
                                     <Badge variant="outline" className={
@@ -79,7 +79,7 @@ export default async function MisAnunciosPage() {
                                     <Users size={14} className="text-purple-400" /> {anuncio._count.postulaciones}
                                 </div>
                                 <div className="col-span-3 hidden md:block text-right text-sm text-slate-500">
-                                    {new Date(anuncio.fecha_creacion).toLocaleDateString()}
+                                    {new Date(anuncio.fecha_publicacion).toLocaleDateString()}
                                 </div>
                                 <div className="col-span-1 hidden md:block text-center">
                                     {/* Actions placeholder - would require client component for dropdown logic or separate actions component */}

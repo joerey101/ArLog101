@@ -17,7 +17,7 @@ async function updateCompanyProfile(formData: FormData) {
     if (!session) return;
 
     const razon_social = formData.get('razon_social') as string;
-    const industria = formData.get('industria') as string;
+    const rubro = formData.get('rubro') as string;
     const sitio_web = formData.get('sitio_web') as string;
     const logo_url = formData.get('logo_url') as string;
     const descripcion = formData.get('descripcion') as string;
@@ -25,10 +25,10 @@ async function updateCompanyProfile(formData: FormData) {
 
     await prisma.perfilEmpresa.upsert({
         where: { usuario_id: parseInt(session.user.id) },
-        update: { razon_social, industria, sitio_web, logo_url, descripcion, cuit },
+        update: { razon_social, rubro, sitio_web, logo_url, descripcion, cuit },
         create: {
             usuario_id: parseInt(session.user.id),
-            razon_social, industria, sitio_web, logo_url, descripcion, cuit
+            razon_social, rubro, sitio_web, logo_url, descripcion, cuit
         }
     });
 
@@ -43,6 +43,13 @@ export default async function EmpresaPerfilPage() {
         where: { usuario_id: parseInt(session.user.id) }
     });
 
+    // Fix Legacy Images: Si la URL es relativa (ej: uploads/foto.jpg), le pegamos el dominio viejo
+    const displayLogo = perfil?.logo_url?.startsWith('http')
+        ? perfil.logo_url
+        : perfil?.logo_url
+            ? `https://arlogjobs.joserey101.com/${perfil.logo_url}`
+            : null;
+
     return (
         <div className="max-w-4xl mx-auto">
             <h1 className="text-3xl font-bold text-white mb-8">Marca Empleadora</h1>
@@ -52,15 +59,15 @@ export default async function EmpresaPerfilPage() {
                 <div className="md:col-span-1">
                     <Card className="bg-white/5 border-white/10 sticky top-8">
                         <CardHeader className="text-center">
-                            {perfil?.logo_url ? (
-                                <img src={perfil.logo_url} alt="Logo" className="w-24 h-24 mx-auto rounded-lg object-contain bg-white p-2 mb-4" />
+                            {displayLogo ? (
+                                <img src={displayLogo} alt="Logo" className="w-24 h-24 mx-auto rounded-lg object-contain bg-white p-2 mb-4" />
                             ) : (
                                 <div className="w-24 h-24 bg-slate-700 rounded-lg mx-auto flex items-center justify-center text-4xl font-bold text-slate-300 mb-4">
                                     <Building2Icon />
                                 </div>
                             )}
                             <CardTitle className="text-white">{perfil?.razon_social || 'Nueva Empresa'}</CardTitle>
-                            <CardDescription>{perfil?.industria || 'Industria sin definir'}</CardDescription>
+                            <CardDescription>{perfil?.rubro || 'Industria sin definir'}</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="text-xs text-slate-400">
@@ -89,8 +96,8 @@ export default async function EmpresaPerfilPage() {
                                         <Input id="cuit" name="cuit" defaultValue={perfil?.cuit || ''} className="bg-slate-900 border-white/10 text-white" />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="industria" className="text-slate-300">Industria</Label>
-                                        <Input id="industria" name="industria" defaultValue={perfil?.industria || ''} className="bg-slate-900 border-white/10 text-white" placeholder="Ej: Logística, Retail..." />
+                                        <Label htmlFor="rubro" className="text-slate-300">Industria</Label>
+                                        <Input id="rubro" name="rubro" defaultValue={perfil?.rubro || ''} className="bg-slate-900 border-white/10 text-white" placeholder="Ej: Logística, Retail..." />
                                     </div>
                                 </div>
 
