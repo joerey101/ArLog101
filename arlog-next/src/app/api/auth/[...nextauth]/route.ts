@@ -26,7 +26,13 @@ export const authOptions: NextAuthOptions = {
                 }
 
                 // 2. Validar contraseña
-                const isValid = await bcrypt.compare(credentials.password, user.password_hash);
+                // Compatibilidad PHP: bcryptjs no soporta prefijo $2y$, lo cambiamos a $2a$
+                let currentHash = user.password_hash;
+                if (currentHash.startsWith('$2y$')) {
+                    currentHash = currentHash.replace(/^\$2y\$/, '$2a$');
+                }
+
+                const isValid = await bcrypt.compare(credentials.password, currentHash);
 
                 if (!isValid) {
                     throw new Error("Contraseña incorrecta");
