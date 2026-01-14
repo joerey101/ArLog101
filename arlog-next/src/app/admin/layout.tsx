@@ -28,13 +28,23 @@ export default function AdminLayout({
                     </Link>
 
                     <div className="py-2">
-                        <h4 className="px-4 text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Gestión</h4>
-                        <Link href="/admin/usuarios">
+                        <h4 className="px-4 text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Comunidad</h4>
+                        <Link href="/admin/candidatos">
                             <Button variant="ghost" className="w-full justify-start text-slate-300 hover:text-white hover:bg-white/5">
                                 <Users className="mr-2 h-4 w-4 text-slate-400" />
-                                Usuarios
+                                Candidatos
                             </Button>
                         </Link>
+                        <Link href="/admin/empresas">
+                            <Button variant="ghost" className="w-full justify-start text-slate-300 hover:text-white hover:bg-white/5">
+                                <Briefcase className="mr-2 h-4 w-4 text-slate-400" />
+                                Empresas
+                            </Button>
+                        </Link>
+                    </div>
+
+                    <div className="py-2">
+                        <h4 className="px-4 text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Bolsa de Trabajo</h4>
                         <Link href="/admin/anuncios">
                             <Button variant="ghost" className="w-full justify-start text-slate-300 hover:text-white hover:bg-white/5">
                                 <Briefcase className="mr-2 h-4 w-4 text-slate-400" />
@@ -45,10 +55,10 @@ export default function AdminLayout({
 
                     <div className="py-2">
                         <h4 className="px-4 text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Sistema</h4>
-                        <Link href="/admin/configuracion">
+                        <Link href="/admin/etiquetas">
                             <Button variant="ghost" className="w-full justify-start text-slate-300 hover:text-white hover:bg-white/5">
                                 <Settings className="mr-2 h-4 w-4 text-slate-400" />
-                                Configuración
+                                Etiquetas (Tags)
                             </Button>
                         </Link>
                     </div>
