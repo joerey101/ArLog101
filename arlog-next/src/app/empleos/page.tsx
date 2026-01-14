@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Briefcase, Clock, Calendar } from "lucide-react";
 import { EstadoAnuncio } from "@prisma/client";
 
+export const dynamic = 'force-dynamic';
+
 export default async function EmpleosPage({
     searchParams,
 }: {
