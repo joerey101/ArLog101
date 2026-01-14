@@ -14,32 +14,31 @@ El objetivo es modernizar la plataforma ArLog Jobs migrando de una arquitectura 
 
 ## 3. Estrategia de Migración
 
-### Fase 0: Inicialización
-1.  Crear proyecto Next.js limpio.
-2.  Configurar Tailwind CSS y shadcn/ui.
-3.  Configurar conectividad a la BD existente (MySQL).
+### Fase 0: Inicialización ✅
+1.  [x] Crear proyecto Next.js limpio.
+2.  [x] Configurar Tailwind CSS y shadcn/ui.
+3.  [x] Configurar conectividad a la BD existente (MySQL/Postgres).
 
-### Fase 1: Capa de Datos (Prisma ORM)
-1.  **Introspección**: Ejecutar `npx prisma db pull` para que Prisma "lea" la estructura actual de tablas (`usuarios`, `anuncios`, `perfiles_*`, etc.) y genere el esquema automáticamente.
-2.  **Tipado**: Generar los tipos de TypeScript automáticamente. Esto reemplazará a `db.php` y consultas SQL manuales inseguras.
+### Fase 1: Capa de Datos (Prisma ORM) ✅
+1.  [x] **Introspección**: Ejecutar `npx prisma db pull` (Hecho).
+2.  [x] **Tipado**: Generar los tipos de TypeScript automáticamente (Hecho).
 
-### Fase 2: Autenticación (El paso crítico)
-*   Reemplazar `auth.php`.
-*   Implementar **NextAuth** con el proveedor de "Credentials".
-*   **Reto**: La lógica de hashing de contraseñas (`password_hash` de PHP usa bcrypt). NextAuth/Node.js soportan bcrypt, por lo que los usuarios existentes **podrán loguearse sin cambiar contraseña**.
-*   Definir Sesiones: Mapear roles (`admin`, `empresa`, `candidato`) a la sesión del JWT.
+### Fase 2: Autenticación (El paso crítico) ✅
+*   [x] Reemplazar `auth.php`.
+*   [x] Implementar **NextAuth** con el proveedor de "Credentials".
+*   [x] Definir Sesiones: Mapear roles (`admin`, `empresa`, `candidato`) a la sesión del JWT (Corregido bug mayúsculas v2.0.5).
 
-### Fase 3: Rutas Públicas (Frontend)
+### Fase 3: Rutas Públicas (Frontend) ✅
 Reconstruir las vistas HTML/PHP usando Componentes React:
-*   `index.php` -> `app/page.tsx` (Hero, Buscador, Stats).
-*   `empleos.html` -> `app/empleos/page.tsx` (Listado con filtros serverside).
-*   `ver_empresa.php` -> `app/empresas/[id]/page.tsx` (Página dinámica).
+*   [x] `index.php` -> `app/page.tsx` (Hero, Buscador, Stats).
+*   [x] `empleos.html` -> `app/empleos/page.tsx` (Listado con filtros serverside).
+*   [x] `ver_empresa.php` -> `app/empresas/[id]/page.tsx` (Página de detalle de empleo completa).
 
-### Fase 4: Paneles (Dashboards)
+### Fase 4: Paneles (Dashboards) 🚧 (En Progreso)
 Convertir lógica de sesión protegida:
-*   **Candidato**: `mis_postulaciones.php` -> `app/candidato/dashboard/page.tsx`.
-*   **Empresa**: `dashboard_empresa.php` -> `app/empresa/dashboard/page.tsx`.
-*   **Admin**: `admin_dashboard.php` -> `app/admin/page.tsx`.
+*   [x] **Candidato**: `mis_postulaciones.php` -> `app/candidato/dashboard`.
+*   [ ] **Empresa**: `dashboard_empresa.php` -> `app/empresa/dashboard`.
+*   [ ] **Admin**: `admin_dashboard.php` -> `app/admin/page.tsx`.
 
 ## 4. Análisis de Riesgos y Notas
 *   **SEO**: Next.js mejora el SEO drásticamente con Server Side Rendering (SSR), algo que ya teníamos en PHP pero ahora será más rápido.
