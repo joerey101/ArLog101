@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../../api/auth/[...nextauth]/route";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { EstadoAnuncio } from "@prisma/client";
 
 export async function createJobAction(formData: FormData) {
     const session = await getServerSession(authOptions);
@@ -24,7 +25,7 @@ export async function createJobAction(formData: FormData) {
                 departamento,
                 ubicacion,
                 tipo_contrato,
-                estado: 'activo'
+                estado: EstadoAnuncio.activo
             }
         });
 

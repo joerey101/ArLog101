@@ -2,6 +2,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import prisma from "@/lib/prisma";
+import { EstadoAnuncio } from "@prisma/client";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,7 +23,7 @@ export default async function EmpresaDashboard() {
     const perfil = await prisma.perfilEmpresa.findUnique({ where: { usuario_id: userId } });
 
     const anunciosActivos = await prisma.anuncio.count({
-        where: { usuario_id: userId, estado: 'activo' }
+        where: { usuario_id: userId, estado: EstadoAnuncio.activo }
     });
 
     // Obtenemos los IDs de mis anuncios para contar postulaciones

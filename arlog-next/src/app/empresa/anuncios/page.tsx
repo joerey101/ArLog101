@@ -2,6 +2,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import prisma from "@/lib/prisma";
+import { EstadoAnuncio } from "@prisma/client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -68,8 +69,8 @@ export default async function MisAnunciosPage() {
                                 </div>
                                 <div className="col-span-3 md:col-span-2 text-center">
                                     <Badge variant="outline" className={
-                                        anuncio.estado === 'activo' ? 'border-emerald-500/50 text-emerald-400 bg-emerald-500/10' :
-                                            anuncio.estado === 'pausado' ? 'border-yellow-500/50 text-yellow-500 bg-yellow-500/10' :
+                                        anuncio.estado === EstadoAnuncio.activo ? 'border-emerald-500/50 text-emerald-400 bg-emerald-500/10' :
+                                            anuncio.estado === EstadoAnuncio.pausado ? 'border-yellow-500/50 text-yellow-500 bg-yellow-500/10' :
                                                 'border-slate-500 text-slate-500'
                                     }>
                                         {anuncio.estado.toUpperCase()}
