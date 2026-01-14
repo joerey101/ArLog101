@@ -21,7 +21,7 @@ export default async function AdminUsuariosPage() {
         orderBy: { fecha_registro: 'desc' },
         include: {
             perfilCandidato: { select: { nombre: true, apellido: true } },
-            empresa_perfil: { select: { razon_social: true } }
+            perfilEmpresa: { select: { razon_social: true } }
         }
     });
 
@@ -67,7 +67,7 @@ export default async function AdminUsuariosPage() {
                                         <td className="px-6 py-4">
                                             {user.perfilCandidato
                                                 ? `${user.perfilCandidato.nombre} ${user.perfilCandidato.apellido}`
-                                                : user.empresa_perfil?.razon_social || '-'
+                                                : user.perfilEmpresa?.razon_social || '-'
                                             }
                                         </td>
                                         <td className="px-6 py-4">

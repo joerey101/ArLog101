@@ -13,7 +13,11 @@ export default async function AdminDashboardPage() {
     const session = await getServerSession(authOptions);
 
     // Strict Admin Check
-    if (!session || session.user.rol !== 'ADMIN') {
+    if (!session) {
+        redirect('/login?callbackUrl=/admin/dashboard');
+    }
+
+    if (session.user.rol !== 'ADMIN') {
         redirect('/');
     }
 
