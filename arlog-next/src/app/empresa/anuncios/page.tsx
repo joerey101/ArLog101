@@ -49,12 +49,11 @@ export default async function MisAnunciosPage() {
 
             <div className="bg-slate-900 rounded-xl border border-white/5 overflow-hidden">
                 {/* Table Header */}
-                <div className="grid grid-cols-12 gap-4 p-4 border-b border-white/5 bg-white/[0.02] text-xs font-bold text-slate-500 uppercase tracking-wider">
-                    <div className="col-span-6 md:col-span-5">Título del Puesto</div>
-                    <div className="col-span-3 md:col-span-2 text-center">Estado</div>
-                    <div className="col-span-3 md:col-span-2 text-center">Candidatos</div>
-                    <div className="col-span-3 hidden md:block text-right">Publicado</div>
-                    <div className="col-span-1 hidden md:block text-center"></div>
+                <div className="grid grid-cols-12 gap-4 p-4 border-b border-white/5 bg-white/[0.02] text-xs font-bold text-slate-500 uppercase tracking-wider hidden md:grid">
+                    <div className="col-span-6">Título del Puesto</div>
+                    <div className="col-span-2 text-center">Estado</div>
+                    <div className="col-span-2 text-center">Candidatos</div>
+                    <div className="col-span-2 text-right">Publicado</div>
                 </div>
 
                 {/* Table Body */}
@@ -67,11 +66,14 @@ export default async function MisAnunciosPage() {
                     <div className="divide-y divide-white/5">
                         {anuncios.map((anuncio) => (
                             <div key={anuncio.id} className="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/[0.02] transition">
-                                <div className="col-span-6 md:col-span-5">
-                                    <h3 className="text-white font-bold truncate">{anuncio.titulo}</h3>
-                                    <p className="text-xs text-slate-500 truncate">{anuncio.ubicacion}</p>
+                                <div className="col-span-12 md:col-span-6">
+                                    <h3 className="text-white font-bold truncate text-lg mb-1">{anuncio.titulo}</h3>
+                                    <p className="text-xs text-slate-500 truncate mb-3">{anuncio.ubicacion}</p>
+                                    <div className="flex gap-2">
+                                        <JobActions jobId={anuncio.id} />
+                                    </div>
                                 </div>
-                                <div className="col-span-3 md:col-span-2 text-center">
+                                <div className="col-span-4 md:col-span-2 text-center flex items-center justify-center">
                                     <Badge variant="outline" className={
                                         anuncio.estado === EstadoAnuncio.ACTIVO ? 'border-emerald-500/50 text-emerald-400 bg-emerald-500/10' :
                                             anuncio.estado === EstadoAnuncio.PAUSADO ? 'border-yellow-500/50 text-yellow-500 bg-yellow-500/10' :
@@ -80,17 +82,14 @@ export default async function MisAnunciosPage() {
                                         {anuncio.estado?.toUpperCase() || 'S/D'}
                                     </Badge>
                                 </div>
-                                <div className="col-span-3 md:col-span-2 text-center flex items-center justify-center gap-1 font-bold">
-                                    <Link href={`/empresa/anuncios/${anuncio.id}/postulantes?from=/empresa/anuncios`} className="flex items-center gap-2 px-3 py-1 rounded-md hover:bg-white/10 text-white transition-colors">
-                                        <Users size={14} className="text-purple-400" /> {anuncio._count.postulaciones}
+                                <div className="col-span-4 md:col-span-2 text-center flex items-center justify-center gap-1 font-bold">
+                                    <Link href={`/empresa/anuncios/${anuncio.id}/postulantes?from=/empresa/anuncios`} className="flex items-center gap-2 px-3 py-1 rounded-md hover:bg-white/10 text-white transition-colors group">
+                                        <Users size={16} className="text-purple-400 group-hover:scale-110 transition-transform" />
+                                        <span>{anuncio._count.postulaciones}</span>
                                     </Link>
                                 </div>
-                                <div className="col-span-3 hidden md:block text-right text-sm text-slate-500">
+                                <div className="col-span-4 md:col-span-2 text-right text-sm text-slate-500 flex items-center justify-end">
                                     {new Date(anuncio.fecha_publicacion).toLocaleDateString()}
-                                </div>
-                                <div className="col-span-1 hidden md:block text-center">
-                                    {/* Actions placeholder - would require client component for dropdown logic or separate actions component */}
-                                    <JobActions jobId={anuncio.id} />
                                 </div>
                             </div>
                         ))}
