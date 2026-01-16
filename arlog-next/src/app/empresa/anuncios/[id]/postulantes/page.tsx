@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Phone, Mail, MapPin, Linkedin, FileText, ArrowLeft, MessageSquare, Download } from "lucide-react";
 import { Rol } from "@prisma/client";
+import { StatusSelector } from "./status-selector";
 
 export default async function CompanyApplicantsPage({ params }: { params: Promise<{ id: string }> }) {
     const session = await getServerSession(authOptions);
@@ -88,6 +89,13 @@ export default async function CompanyApplicantsPage({ params }: { params: Promis
                                             <Badge variant="outline" className="w-fit text-slate-400 border-slate-700">
                                                 {new Date(post.fecha_postulacion).toLocaleDateString()}
                                             </Badge>
+                                            <div className="md:ml-4">
+                                                <StatusSelector
+                                                    postulacionId={post.id}
+                                                    currentStatus={post.estado}
+                                                    path={`/empresa/anuncios/${anuncioId}/postulantes`}
+                                                />
+                                            </div>
                                         </div>
 
                                         <div className="flex flex-wrap gap-4 text-sm text-slate-400">
