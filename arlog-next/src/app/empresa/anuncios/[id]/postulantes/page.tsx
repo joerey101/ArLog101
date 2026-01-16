@@ -76,7 +76,7 @@ export default async function CompanyApplicantsPage({ params }: { params: { id: 
                             <Card key={post.id} className="bg-slate-900 border-white/5 hover:border-white/10 transition-all">
                                 <CardContent className="p-6 flex flex-col md:flex-row gap-6 items-start md:items-center">
                                     <Avatar className="w-16 h-16 border-2 border-slate-700">
-                                        <AvatarImage src={perfil?.cv_url || undefined} /> {/* Fallback if no photo field yet, maybe reuse CV URL if it was an image? No, wait, Profile Photo field missing. Using initials for now */}
+                                        <AvatarImage src={perfil?.foto_url || undefined} className="object-cover" />
                                         <AvatarFallback className="bg-slate-800 text-slate-300 font-bold text-xl">{initials}</AvatarFallback>
                                     </Avatar>
 

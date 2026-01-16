@@ -25,8 +25,10 @@ enum Modalidad {
 }
 
 enum EstadoAnuncio {
+  PENDIENTE @map("pendiente")
   ACTIVO    @map("activo")
   PAUSADO   @map("pausado")
+  RECHAZADO @map("rechazado")
   CERRADO   @map("cerrado")
   BORRADOR  @map("borrador")
 }
@@ -102,6 +104,7 @@ model PerfilCandidato {
   nombre          String?
   apellido        String?
   telefono        String?
+  foto_url        String? // [NEW] Foto de perfil (Cloudinary)
   titulo_cargo    String? // Ej: Desarrollador Fullstack
   sobre_mi        String? @db.Text
   cv_url          String?

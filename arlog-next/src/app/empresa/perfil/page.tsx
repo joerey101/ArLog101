@@ -3,37 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { revalidatePath } from "next/cache";
-
-async function updateCompanyProfile(formData: FormData) {
-    'use server'
-
-    const session = await getServerSession(authOptions);
-    if (!session) return;
-
-    const razon_social = formData.get('razon_social') as string;
-    const rubro = formData.get('rubro') as string;
-    const sitio_web = formData.get('sitio_web') as string;
-    const logo_url = formData.get('logo_url') as string;
-    const descripcion = formData.get('descripcion') as string;
-    const cuit = formData.get('cuit') as string;
-
-    await prisma.perfilEmpresa.upsert({
-        where: { usuario_id: parseInt(session.user.id) },
-        update: { razon_social, rubro, sitio_web, logo_url, descripcion, cuit },
-        create: {
-            usuario_id: parseInt(session.user.id),
-            razon_social, rubro, sitio_web, logo_url, descripcion, cuit
-        }
-    });
-
-    revalidatePath('/empresa/perfil');
-}
+import { CompanyForm } from "./company-form";
 
 export default async function EmpresaPerfilPage() {
     const session = await getServerSession(authOptions);
@@ -43,7 +14,7 @@ export default async function EmpresaPerfilPage() {
         where: { usuario_id: parseInt(session.user.id) }
     });
 
-    // Fix Legacy Images: Si la URL es relativa (ej: uploads/foto.jpg), le pegamos el dominio viejo
+    // Fix Legacy Images logic
     const displayLogo = perfil?.logo_url?.startsWith('http')
         ? perfil.logo_url
         : perfil?.logo_url
@@ -84,42 +55,7 @@ export default async function EmpresaPerfilPage() {
                             <CardTitle className="text-white">Datos Institucionales</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <form action={updateCompanyProfile} className="space-y-5">
-                                <div className="space-y-2">
-                                    <Label htmlFor="razon_social" className="text-slate-300">Razón Social / Nombre Fantasía</Label>
-                                    <Input id="razon_social" name="razon_social" defaultValue={perfil?.razon_social || ''} className="bg-slate-900 border-white/10 text-white" required />
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="cuit" className="text-slate-300">CUIT (Opcional)</Label>
-                                        <Input id="cuit" name="cuit" defaultValue={perfil?.cuit || ''} className="bg-slate-900 border-white/10 text-white" />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="rubro" className="text-slate-300">Industria</Label>
-                                        <Input id="rubro" name="rubro" defaultValue={perfil?.rubro || ''} className="bg-slate-900 border-white/10 text-white" placeholder="Ej: Logística, Retail..." />
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="sitio_web" className="text-slate-300">Sitio Web</Label>
-                                    <Input id="sitio_web" name="sitio_web" defaultValue={perfil?.sitio_web || ''} className="bg-slate-900 border-white/10 text-white" placeholder="https://miempresa.com" />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="logo_url" className="text-slate-300">URL del Logo (Imagen)</Label>
-                                    <Input id="logo_url" name="logo_url" defaultValue={perfil?.logo_url || ''} className="bg-slate-900 border-white/10 text-white" placeholder="https://..." />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="descripcion" className="text-slate-300">Sobre la Empresa</Label>
-                                    <Textarea id="descripcion" name="descripcion" defaultValue={perfil?.descripcion || ''} className="bg-slate-900 border-white/10 text-white h-32" placeholder="Describe brevemente a qué se dedican..." />
-                                </div>
-
-                                <Button type="submit" className="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold">
-                                    Actualizar Perfil
-                                </Button>
-                            </form>
+                            <CompanyForm initialData={perfil} />
                         </CardContent>
                     </Card>
                 </div>

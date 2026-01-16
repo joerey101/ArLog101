@@ -15,6 +15,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { JobActions } from "./job-actions";
 
 export default async function MisAnunciosPage() {
     const session = await getServerSession(authOptions);
@@ -38,7 +39,7 @@ export default async function MisAnunciosPage() {
                 <h1 className="text-3xl font-bold text-white">Mis Ofertas de Empleo</h1>
                 <Link href="/empresa/anuncios/nuevo">
                     <Button className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold">
-                        <PlusCircle className="mr-2 h-4 w-4" /> Nueva Publicación
+                        <PlusCircle className="mr-2 h-4 w-4" /> Nuevo Anuncio
                     </Button>
                 </Link>
             </div>
@@ -77,7 +78,7 @@ export default async function MisAnunciosPage() {
                                     </Badge>
                                 </div>
                                 <div className="col-span-3 md:col-span-2 text-center flex items-center justify-center gap-1 font-bold">
-                                    <Link href={`/empresa/anuncios/${anuncio.id}/postulantes`} className="flex items-center gap-2 px-3 py-1 rounded-md hover:bg-white/10 text-white transition-colors">
+                                    <Link href={`/empresa/anuncios/${anuncio.id}/postulantes?from=/empresa/anuncios`} className="flex items-center gap-2 px-3 py-1 rounded-md hover:bg-white/10 text-white transition-colors">
                                         <Users size={14} className="text-purple-400" /> {anuncio._count.postulaciones}
                                     </Link>
                                 </div>
@@ -86,9 +87,7 @@ export default async function MisAnunciosPage() {
                                 </div>
                                 <div className="col-span-1 hidden md:block text-center">
                                     {/* Actions placeholder - would require client component for dropdown logic or separate actions component */}
-                                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                                        <MoreHorizontal className="h-4 w-4" />
-                                    </Button>
+                                    <JobActions jobId={anuncio.id} />
                                 </div>
                             </div>
                         ))}

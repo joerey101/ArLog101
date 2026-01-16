@@ -37,13 +37,25 @@ async function applyAction(formData: FormData) {
     }
 }
 
-export default async function JobDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function JobDetailPage({
+    params,
+    searchParams
+}: {
+    params: Promise<{ id: string }>,
+    searchParams?: Promise<{ from?: string }>
+}) {
     const session = await getServerSession(authOptions);
     // Next.js 15+ requires awaiting params
     const { id } = await params;
+    const { from } = await searchParams || {};
     const anuncioId = parseInt(id);
 
     if (isNaN(anuncioId)) notFound();
+
+    const backHref = from || '/empleos';
+    const backLabel = from?.includes('admin') ? '← Volver al Panel Admin' :
+        from?.includes('empresa') ? '← Volver a Mis Avisos' :
+            '← Volver al listado';
 
     const anuncio = await prisma.anuncio.findUnique({
         where: { id: anuncioId },
@@ -65,8 +77,8 @@ export default async function JobDetailPage({ params }: { params: Promise<{ id: 
         <div className="min-h-screen bg-slate-950 py-12">
             <div className="container mx-auto px-6 max-w-4xl">
                 <div className="mb-6">
-                    <Link href="/empleos" className="text-emerald-400 hover:text-emerald-300 text-sm mb-4 inline-flex items-center gap-1 font-medium bg-slate-900/50 px-3 py-1.5 rounded-lg border border-white/5 hover:border-emerald-500/30 transition-all">
-                        ← Volver al listado
+                    <Link href={backHref} className="text-emerald-400 hover:text-emerald-300 text-sm mb-4 inline-flex items-center gap-1 font-medium bg-slate-900/50 px-3 py-1.5 rounded-lg border border-white/5 hover:border-emerald-500/30 transition-all">
+                        {backLabel}
                     </Link>
 
                     <div className="flex flex-col md:flex-row gap-6 items-start justify-between mt-6">

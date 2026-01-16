@@ -3,24 +3,11 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Calendar, MapPin, Building, Info } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { MapPin, Building, Info, FileText } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-
-// Helper para colores de estado
-const getStatusBadge = (status: string) => {
-    switch (status) {
-        case 'nuevo': return <Badge variant="secondary">Enviada</Badge>;
-        case 'visto': return <Badge className="bg-blue-500/20 text-blue-400 hover:bg-blue-500/30">Visto</Badge>;
-        case 'entrevista': return <Badge className="bg-purple-500/20 text-purple-400 hover:bg-purple-500/30">Entrevista</Badge>;
-        case 'finalista': return <Badge className="bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30">Finalista</Badge>;
-        case 'descartado': return <Badge className="bg-red-500/10 text-red-400 hover:bg-red-500/20">Descartado</Badge>;
-        case 'contratado': return <Badge className="bg-emerald-500 text-black font-bold">¡Contratado!</Badge>;
-        default: return <Badge variant="outline">{status}</Badge>;
-    }
-};
+import { ApplicationTimeline } from "./timeline";
 
 export default async function MisPostulacionesPage() {
     const session = await getServerSession(authOptions);
@@ -31,8 +18,8 @@ export default async function MisPostulacionesPage() {
         include: {
             anuncio: {
                 include: {
-                    empresa_perfil: true, // Relación directa ahora disponible
-                    usuario: true // Fallback por si acaso
+                    empresa_perfil: true,
+                    usuario: true
                 }
             }
         },
@@ -40,9 +27,12 @@ export default async function MisPostulacionesPage() {
     });
 
     return (
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-4xl mx-auto">
             <div className="flex justify-between items-center mb-8">
-                <h1 className="text-3xl font-bold text-white">Mis Postulaciones</h1>
+                <div>
+                    <h1 className="text-3xl font-bold text-white">Mis Postulaciones</h1>
+                    <p className="text-slate-400">Sigue el estado de tus candidaturas en tiempo real.</p>
+                </div>
                 <Link href="/empleos">
                     <Button variant="outline" className="border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10">Buscar más empleos</Button>
                 </Link>
@@ -60,19 +50,16 @@ export default async function MisPostulacionesPage() {
                     </div>
                 </Card>
             ) : (
-                <div className="grid gap-4">
+                <div className="grid gap-6">
                     {postulaciones.map((p) => (
-                        <Card key={p.id} className="bg-slate-900/50 border-white/5 hover:border-white/10 transition-all">
-                            <CardContent className="p-6">
-                                <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
-
-                                    {/* Info del Empleo */}
+                        <Card key={p.id} className="bg-slate-900 border-white/5 overflow-hidden">
+                            <CardContent className="p-0">
+                                {/* Header del Empleo */}
+                                <div className="p-6 border-b border-white/5 flex flex-col md:flex-row justify-between gap-4">
                                     <div className="space-y-1">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            {getStatusBadge(p.estado)}
-                                            <span className="text-xs text-slate-500">{new Date(p.fecha_postulacion).toLocaleDateString()}</span>
-                                        </div>
-                                        <h3 className="text-xl font-bold text-white">{p.anuncio.titulo}</h3>
+                                        <Link href={`/empleos/${p.anuncio_id}`} className="hover:underline">
+                                            <h3 className="text-xl font-bold text-white hover:text-emerald-400 transition-colors">{p.anuncio.titulo}</h3>
+                                        </Link>
                                         <div className="flex flex-wrap gap-4 text-sm text-slate-400">
                                             <span className="flex items-center gap-1">
                                                 <Building size={14} className="text-cyan-400" />
@@ -83,13 +70,24 @@ export default async function MisPostulacionesPage() {
                                                     <MapPin size={14} className="text-emerald-400" /> {p.anuncio.ubicacion}
                                                 </span>
                                             )}
+                                            <span className="text-slate-600">
+                                                • Enviada el {new Date(p.fecha_postulacion).toLocaleDateString()}
+                                            </span>
                                         </div>
                                     </div>
-
-                                    {/* Acciones (Futuro: Chat, Ver Detalle) */}
                                     <div>
-                                        <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">Ver aviso original</Button>
+                                        <Link href={`/empleos/${p.anuncio_id}`}>
+                                            <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white">
+                                                <FileText className="w-4 h-4 mr-2" />
+                                                Ver Aviso
+                                            </Button>
+                                        </Link>
                                     </div>
+                                </div>
+
+                                {/* Area de Status Timeline */}
+                                <div className="px-6 py-6 bg-slate-950/30">
+                                    <ApplicationTimeline status={p.estado} />
                                 </div>
                             </CardContent>
                         </Card>

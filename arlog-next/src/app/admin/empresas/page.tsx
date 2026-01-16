@@ -59,10 +59,12 @@ export default async function AdminEmpresasPage() {
                                 {empresas.map((user) => (
                                     <tr key={user.id} className="hover:bg-white/5 transition-colors">
                                         <td className="px-6 py-4">
-                                            <div className="text-white font-medium text-base">
-                                                {user.perfilEmpresa?.razon_social || 'Pendiente'}
-                                            </div>
-                                            <div className="text-xs text-slate-500">ID: #{user.id}</div>
+                                            <Link href={`/admin/empresas/${user.id}`} className="group">
+                                                <div className="text-white font-medium text-base group-hover:text-cyan-400 transition-colors">
+                                                    {user.perfilEmpresa?.razon_social || 'Pendiente'}
+                                                </div>
+                                                <div className="text-xs text-slate-500">ID: #{user.id}</div>
+                                            </Link>
                                         </td>
                                         <td className="px-6 py-4 text-slate-300">
                                             {user.perfilEmpresa?.rubro || '-'}

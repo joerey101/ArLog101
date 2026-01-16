@@ -72,7 +72,7 @@ export default async function AdminAnunciosPage() {
                                             {job._count.postulaciones}
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <Link href={`/empleos/${job.id}`}>
+                                            <Link href={`/empleos/${job.id}?from=/admin/anuncios`}>
                                                 <Button size="icon" variant="ghost" className="hover:text-emerald-400 hover:bg-emerald-500/10">
                                                     <Eye size={16} />
                                                 </Button>

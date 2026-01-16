@@ -59,10 +59,12 @@ export default async function AdminCandidatosPage() {
                                 {candidatos.map((user) => (
                                     <tr key={user.id} className="hover:bg-white/5 transition-colors">
                                         <td className="px-6 py-4">
-                                            <div className="text-white font-medium">
-                                                {user.perfilCandidato?.nombre} {user.perfilCandidato?.apellido}
-                                            </div>
-                                            <div className="text-xs text-slate-500">ID: #{user.id}</div>
+                                            <Link href={`/admin/candidatos/${user.id}`} className="group">
+                                                <div className="text-white font-medium group-hover:text-emerald-400 transition-colors">
+                                                    {user.perfilCandidato?.nombre} {user.perfilCandidato?.apellido}
+                                                </div>
+                                                <div className="text-xs text-slate-500">ID: #{user.id}</div>
+                                            </Link>
                                         </td>
                                         <td className="px-6 py-4 text-slate-300">
                                             {user.perfilCandidato?.titulo_cargo || 'Sin título'}
