@@ -73,7 +73,7 @@ export default function AdminLayout({
                         <p className="text-[10px] text-slate-400">Acceso total al sistema.</p>
                     </div>
 
-                    <Link href="/api/auth/signout?callbackUrl=/login">
+                    <Link href="/api/auth/signout?callbackUrl=/">
                         <Button variant="ghost" className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-500/10">
                             <LogOut className="mr-2 h-4 w-4" />
                             Cerrar Sesión
