@@ -35,8 +35,11 @@ export default async function MisAnunciosPage() {
 
     return (
         <div className="max-w-6xl mx-auto">
-            <div className="flex justify-between items-center mb-6 px-4">
-                <h1 className="text-2xl md:text-3xl font-bold text-white">Mis Ofertas de Empleo</h1>
+            <div className="flex justify-between items-center mb-6 pl-4 pr-4 md:pl-0 md:pr-0">
+                <h1 className="text-2xl md:text-3xl font-bold text-white flex items-center gap-2">
+                    Mis Ofertas
+                    <span className="text-xs bg-emerald-500/10 text-emerald-500 px-2 py-1 rounded-full border border-emerald-500/20">v2.1</span>
+                </h1>
                 <Link href="/empresa/anuncios/nuevo">
                     <Button className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold shadow-lg shadow-emerald-500/20">
                         <PlusCircle className="mr-2 h-4 w-4" /> Nuevo Anuncio

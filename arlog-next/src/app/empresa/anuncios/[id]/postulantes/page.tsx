@@ -16,6 +16,7 @@ export default async function CompanyApplicantsPage({ params }: { params: Promis
     if (!session || session.user.rol !== Rol.EMPRESA) redirect('/login');
 
     const { id } = await params;
+    console.log("Loading applicants for job:", id);
     const anuncioId = parseInt(id);
     const userId = parseInt(session.user.id);
 
