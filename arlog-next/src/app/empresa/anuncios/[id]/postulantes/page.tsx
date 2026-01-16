@@ -1,6 +1,6 @@
 
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../../../api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -11,11 +11,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Phone, Mail, MapPin, Linkedin, FileText, ArrowLeft, MessageSquare, Download } from "lucide-react";
 import { Rol } from "@prisma/client";
 
-export default async function CompanyApplicantsPage({ params }: { params: { id: string } }) {
+export default async function CompanyApplicantsPage({ params }: { params: Promise<{ id: string }> }) {
     const session = await getServerSession(authOptions);
     if (!session || session.user.rol !== Rol.EMPRESA) redirect('/login');
 
-    const anuncioId = parseInt(params.id);
+    const { id } = await params;
+    const anuncioId = parseInt(id);
     const userId = parseInt(session.user.id);
 
     // Validate ownership
