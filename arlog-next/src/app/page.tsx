@@ -23,7 +23,7 @@ export default async function Home() {
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center">
-              <img src="/logo.png" alt="ArLog Logo" className="h-10 w-auto object-contain" />
+              <img src="/logo.png" alt="ArLog Logo" className="h-12 w-auto object-contain" />
             </Link>
           </div>
           <div className="flex gap-4">
