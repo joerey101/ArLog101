@@ -14,8 +14,7 @@ export function Footer() {
           {/* Brand Column */}
           <div className="space-y-6">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white text-sm">A</div>
-              <span className="font-bold text-xl tracking-tight text-slate-900">ArLog</span>
+              <img src="/logo.png" alt="ArLog Logo" className="h-8 w-auto object-contain" />
             </div>
             <p className="text-slate-500 text-sm leading-relaxed max-w-xs">
               Transformando la gestión de talento logístico con tecnología de vanguardia y diseño centrado en las personas.

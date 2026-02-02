@@ -21,9 +21,10 @@ export default async function Home() {
       {/* Navbar Placeholder */}
       <nav className="fixed top-0 w-full z-50 border-b border-slate-100 bg-white/90 backdrop-blur-md">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white text-sm">A</div>
-            <span className="font-bold text-xl tracking-tight text-slate-900">ArLog<span className="text-blue-600">Jobs</span></span>
+          <div className="flex items-center gap-3">
+            <Link href="/" className="flex items-center">
+              <img src="/logo.png" alt="ArLog Logo" className="h-10 w-auto object-contain" />
+            </Link>
           </div>
           <div className="flex gap-4">
             <Link href="/login">
